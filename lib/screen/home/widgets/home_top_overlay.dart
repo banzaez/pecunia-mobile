@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/providers/settings_notifier.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
 import 'package:pecunia/screen/home/home_controller.dart';
-import 'package:pecunia/styles/app_panel_style.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/widgets/total_header.dart';
 
 class HomeTopOverlay extends ConsumerWidget {
@@ -23,8 +23,8 @@ class HomeTopOverlay extends ConsumerWidget {
       transactionNotifierProvider.select((s) => s.analyticsTotal),
     );
 
-    final baseColor = appOverlayBaseColor(context);
-    final panelColor = appPanelColor(context);
+    final baseColor = AppColors.overlayBase(context);
+    final panelColor = AppColors.panel(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

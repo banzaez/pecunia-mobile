@@ -6,6 +6,7 @@ import 'package:pecunia/models/analytics.dart';
 import 'package:pecunia/models/analytics_filter.dart';
 import 'package:pecunia/screen/analytics/analytics_controller.dart';
 import 'package:pecunia/screen/analytics/analytics_palette.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/util/ext_double.dart';
 
@@ -104,7 +105,7 @@ class _AnalyticsGraphState extends ConsumerState<AnalyticsGraph> {
                 Text(
                   centerLabel,
                   style: AppTextStyle.text10w600(
-                    color: isDark ? Colors.white60 : Colors.black54,
+                    color: AppColors.neutralSecondary(context),
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,

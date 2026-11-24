@@ -148,6 +148,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
   }
 
   Widget _dateHeaderWidget(
+    BuildContext context,
     DateTime date,
     double dayTotal,
     AppLocalizations l10n,
@@ -160,7 +161,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
         dayTotal.formatSumCustom(roundUp: widget.isRoundUp);
     // Используем Apple Green для доходных дней, нейтральный для расходных
     final accentColor = dayTotal > 0
-        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
+        ? AppColors.incomeOnSurface(context)
         : dayTotal < 0
         ? (isDark ? Colors.white70 : Colors.black54)
         : (isDark ? Colors.white38 : Colors.black38);
@@ -177,7 +178,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
               Text(
                 formattedDate,
                 style: AppTextStyle.text12w600(
-                  color: isDark ? Colors.white60 : Colors.black54,
+                  color: AppColors.neutralSecondary(context),
                 ),
               ),
               if (dayTotal != 0)
@@ -262,6 +263,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
 
         if (item is DateHeaderItem) {
           return _dateHeaderWidget(
+            context,
             item.date,
             item.dayTotal,
             l10n,

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/screen/analytics/analytics_controller.dart';
 import 'package:pecunia/screen/analytics/widgets/analytics_graph.dart';
-import 'package:pecunia/styles/app_panel_style.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/util/app_spaces.dart';
 
@@ -32,8 +32,8 @@ class AnalyticsTopOverlay extends ConsumerWidget {
     final periodStr = ref.watch(
       analyticsNotifierProvider.select((s) => s.periodStr(locale)),
     );
-    final baseColor = appOverlayBaseColor(context);
-    final panelColor = appPanelColor(context);
+    final baseColor = AppColors.overlayBase(context);
+    final panelColor = AppColors.panel(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

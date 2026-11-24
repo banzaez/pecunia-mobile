@@ -174,8 +174,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final accentColor = isIncome
-        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
-        : (isDark ? Colors.white : Colors.black87);
+        ? AppColors.incomeOnSurface(context)
+        : AppColors.expenseOnSurface(context);
 
     final cardBgColor = isDark
         ? Colors.white.withValues(alpha: 0.015)
@@ -248,7 +248,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                       Text(
                         "${filtered.length} ${l10n.analyticsCategoryItemCount}",
                         style: AppTextStyle.text12w400(
-                          color: isDark ? Colors.white60 : Colors.black54,
+                          color: AppColors.neutralSecondary(context),
                         ),
                       ),
                     ],

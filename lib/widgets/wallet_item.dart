@@ -23,7 +23,7 @@ class WalletItem extends ConsumerWidget {
     final avatarBgColor = isDark
         ? Colors.white10
         : Colors.black.withValues(alpha: 0.08);
-    final avatarTextColor = isDark ? Colors.white60 : Colors.black54;
+    final avatarTextColor = AppColors.neutralSecondary(context);
 
     return Card(
       color: cardColor,

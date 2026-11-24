@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:pecunia/styles/app_panel_style.dart';
+import 'package:pecunia/styles/app_colors.dart';
 
 /// Градиентное затемнение края прокручиваемого списка.
 class ListEdgeFade extends StatelessWidget {
@@ -21,8 +21,8 @@ class ListEdgeFade extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseColor = appOverlayBaseColor(context);
-    final panelColor = appPanelColor(context);
+    final baseColor = AppColors.overlayBase(context);
+    final panelColor = AppColors.panel(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final Gradient gradient;

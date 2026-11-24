@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/screen/home/home_controller.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/widgets/dialogs/dialog_choose_wallet.dart';
 
@@ -22,8 +23,8 @@ class CurrentWallet extends ConsumerWidget {
     final fillColor = isDark
         ? Colors.white.withValues(alpha: 0.08)
         : Colors.black.withValues(alpha: 0.04);
-    final muted = isDark ? Colors.white60 : Colors.black54;
-    const accent = Color(0xFF3F51B5);
+    final muted = AppColors.neutralSecondary(context);
+    const accent = AppColors.accentIndigo;
 
     return DialogChooseWallet(
       onChanged: (value) {

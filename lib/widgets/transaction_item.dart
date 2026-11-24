@@ -29,8 +29,8 @@ class TransactionItem extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final amountColor = isIncome
-        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
-        : (isDark ? Colors.white : Colors.black87);
+        ? AppColors.incomeOnSurface(context)
+        : AppColors.expenseOnSurface(context);
 
     final iconColor = isDark ? Colors.white70 : Colors.black87;
     final iconBgColor = isDark
@@ -200,12 +200,11 @@ class TransactionItem extends StatelessWidget {
 
   Widget _description(BuildContext context) {
     if (transaction.description.isEmpty) return const SizedBox.shrink();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     // Используем Flutter overflow вместо ручной обрезки строки
     return Text(
       transaction.description,
       style: AppTextStyle.text12w400(
-        color: isDark ? Colors.white60 : Colors.black54,
+        color: AppColors.neutralSecondary(context),
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -215,9 +214,7 @@ class TransactionItem extends StatelessWidget {
   Widget _date(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final style = AppTextStyle.text12w400(
-      color: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white60
-          : Colors.black54,
+      color: AppColors.neutralSecondary(context),
     );
     if (transaction.createdAt.isToday) {
       return Text(

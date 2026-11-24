@@ -45,4 +45,15 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
       ? Colors.white10
       : Colors.black12;
+
+  static Color panel(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark ? Colors.black : Colors.white;
+    return baseColor.withValues(alpha: isDark ? 0.82 : 0.9);
+  }
+
+  static Color overlayBase(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+      ? Colors.black
+      : Colors.white;
 }

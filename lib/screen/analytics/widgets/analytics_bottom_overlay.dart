@@ -4,7 +4,7 @@ import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/analytics_filter.dart';
 import 'package:pecunia/screen/analytics/analytics_controller.dart';
 import 'package:pecunia/screen/analytics/analytics_bottom_layout.dart';
-import 'package:pecunia/styles/app_panel_style.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/util/app_spaces.dart';
 import 'package:pecunia/widgets/fields/app_switch.dart';
 import 'package:pecunia/widgets/fields/pick_date/pick_date.dart';
@@ -27,8 +27,8 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
     final valuesDay = ref.watch(
       analyticsNotifierProvider.select((s) => s.valuesDay),
     );
-    final baseColor = appOverlayBaseColor(context);
-    final panelColor = appPanelColor(context);
+    final baseColor = AppColors.overlayBase(context);
+    final panelColor = AppColors.panel(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
