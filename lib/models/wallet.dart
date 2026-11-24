@@ -1,4 +1,4 @@
-import 'package:currency_picker/currency_picker.dart';
+import 'package:pecunia/models/currency.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pecunia/models/finance_category.dart';
 import 'package:pecunia/util/sql_fun.dart';

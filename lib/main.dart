@@ -1,7 +1,8 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_localizations/flutter_localizations.dart' as fl;
+import 'package:flutter_localizations/flutter_localizations.dart'
+    hide GlobalCupertinoLocalizations, GlobalMaterialLocalizations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/data/sql/sql_provider.dart';
@@ -94,12 +95,7 @@ class MyApp extends ConsumerWidget {
         AppLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
-        // Нужны для сторонних пакетов на package:flutter/material.dart (например, currency_picker).
-        // ignore: deprecated_member_use
-        fl.GlobalMaterialLocalizations.delegate,
-        // ignore: deprecated_member_use
-        fl.GlobalCupertinoLocalizations.delegate,
-        fl.GlobalWidgetsLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         final settingsLocale = ref.read(settingsNotifierProvider).locale;

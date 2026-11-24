@@ -1,4 +1,4 @@
-import 'package:currency_picker/currency_picker.dart';
+import 'package:pecunia/models/currency.dart';
 import 'package:intl/intl.dart';
 import 'package:pecunia/models/finance_categories.dart';
 import 'package:pecunia/models/finance_category.dart';
