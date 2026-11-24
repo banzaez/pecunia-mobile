@@ -89,6 +89,7 @@ class PickDate extends StatelessWidget {
         format: formatYear,
         values: _resolvedValuesYear,
         isSelected: isYearSelected,
+        textStyle: textStyle,
       ),
       AppSpaces.h8,
       PickDateField(
@@ -98,6 +99,7 @@ class PickDate extends StatelessWidget {
         format: formatMonth,
         values: _resolvedValuesMonth,
         isSelected: isMonthSelected,
+        textStyle: textStyle,
       ),
       AppSpaces.h8,
       PickDateField(
@@ -107,6 +109,7 @@ class PickDate extends StatelessWidget {
         format: formatDay,
         values: _resolvedValuesDay,
         isSelected: isDaySelected,
+        textStyle: textStyle,
       ),
     ],
   );
@@ -122,6 +125,7 @@ class PickDate extends StatelessWidget {
         format: _formatHour,
         values: _valuesHour,
         isSelected: false,
+        textStyle: textStyle,
       ),
       AppSpaces.h8,
       PickDateField(
@@ -131,6 +135,7 @@ class PickDate extends StatelessWidget {
         format: _formatMinute,
         values: _valuesMinute,
         isSelected: false,
+        textStyle: textStyle,
       ),
     ],
   );

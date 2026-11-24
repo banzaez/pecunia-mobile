@@ -8,6 +8,7 @@ import 'package:pecunia/screen/home/home_controller.dart';
 import 'package:pecunia/styles/app_panel_style.dart';
 import 'package:pecunia/screen/home/home_bottom_layout.dart';
 import 'package:pecunia/screen/home/widgets/wallet_dots.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/widgets/app_bottom_sheet.dart';
 import 'package:pecunia/widgets/setting_transaction/setting_transaction.dart';
@@ -190,16 +191,16 @@ class HomeBottomOverlay extends ConsumerWidget {
     required VoidCallback onTap,
   }) {
     final gradientColors = isDark
-        ? [const Color(0xFF3F51B5), const Color(0xFF5C6BC0)]
-        : [const Color(0xFF3F51B5), const Color(0xFF303F9F)];
+        ? [AppColors.accentIndigo, const Color(0xFF5C6BC0)]
+        : [AppColors.accentIndigo, const Color(0xFF303F9F)];
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
-        splashColor: const Color(0xFF3F51B5).withValues(alpha: 0.12),
-        highlightColor: const Color(0xFF3F51B5).withValues(alpha: 0.06),
+        splashColor: AppColors.accentIndigo.withValues(alpha: 0.12),
+        highlightColor: AppColors.accentIndigo.withValues(alpha: 0.06),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           child: Column(
@@ -217,7 +218,7 @@ class HomeBottomOverlay extends ConsumerWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF3F51B5).withValues(alpha: 0.28),
+                      color: AppColors.accentIndigo.withValues(alpha: 0.28),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),

@@ -61,15 +61,15 @@ class SettingWalletController extends ChangeNotifier {
   // ----------VALUES----------------------------------------------------------------------------
 
   void updateValues() {
-    wallet.name = nameController.text;
-    wallet.description = descriptionController.text;
+    wallet.name = nameController.text.trim();
+    wallet.description = descriptionController.text.trim();
     wallet.currency = _currency;
     wallet.showBalance = _showBalance;
     wallet.isRoundUp = _isRoundUp;
   }
 
   bool isOk(String nameError, String currencyError) {
-    errorName = nameController.text.isEmpty ? nameError : null;
+    errorName = nameController.text.trim().isEmpty ? nameError : null;
     errorCurrency = _currency == null ? currencyError : null;
     notifyListeners();
     return errorName == null && errorCurrency == null;

@@ -16,14 +16,31 @@ class WalletItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark
+        ? Colors.white10
+        : Colors.black.withValues(alpha: 0.04);
+    final avatarBgColor = isDark
+        ? Colors.white10
+        : Colors.black.withValues(alpha: 0.08);
+    final avatarTextColor = isDark ? Colors.white60 : Colors.black54;
+
     return Card(
-      color: Colors.white10,
+      color: cardColor,
+      elevation: 0,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.white10,
-          child: Text(
-            wallet.currency?.code ?? "",
-            style: AppTextStyle.text14w600(color: Colors.white60),
+          backgroundColor: avatarBgColor,
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                wallet.currency?.code ?? "",
+                maxLines: 1,
+                style: AppTextStyle.text14w600(color: avatarTextColor),
+              ),
+            ),
           ),
         ),
         title: Text.rich(

@@ -19,6 +19,7 @@ class DropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DropdownButtonFormField<T>(
+    key: ValueKey(value),
     onChanged: (value) {
       if (value == null) return;
       onChanged?.call(value);

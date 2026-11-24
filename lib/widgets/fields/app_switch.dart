@@ -35,7 +35,7 @@ class AppSwitch<T> extends StatelessWidget {
 
   // --------------------------------------------------------------------------------------------
 
-  Widget _button(AppSwitchValue item) {
+  Widget _button(AppSwitchValue<T> item) {
     final isActive = item.value == value;
     final widget = Container(
       alignment: Alignment.center,
@@ -56,6 +56,7 @@ class AppSwitch<T> extends StatelessWidget {
     return isActive
         ? widget
         : GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => onChange.call(item.value),
             child: widget,
           );

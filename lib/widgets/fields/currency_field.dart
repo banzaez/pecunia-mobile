@@ -19,7 +19,9 @@ class CurrencyField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsNotifierProvider);
+    final favoriteCode = ref.watch(
+      settingsNotifierProvider.select((s) => s.currency?.code),
+    );
     return GestureDetector(
       onTap: () => showCurrencyPicker(
         context: context,
@@ -27,7 +29,7 @@ class CurrencyField extends ConsumerWidget {
         showSearchField: true,
         showCurrencyName: true,
         showCurrencyCode: true,
-        favorite: [settings.currency?.code ?? ""],
+        favorite: favoriteCode != null ? [favoriteCode] : const [],
         onSelect: onChange,
       ),
       child: Column(
@@ -41,8 +43,16 @@ class CurrencyField extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(currency?.name ?? ""),
+                Flexible(
+                  child: Text(
+                    currency?.name ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Text(currency?.symbol ?? ""),
+                const SizedBox(width: 8),
                 Text(currency?.code ?? ""),
               ],
             ),

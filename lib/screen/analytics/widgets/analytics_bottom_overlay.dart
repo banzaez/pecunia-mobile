@@ -76,9 +76,12 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
                 ),
                 AppSpaces.v16,
                 PickDate(
-                  onChanged: (value, type) => ref
-                      .read(analyticsNotifierProvider.notifier)
-                      .setDate(value!, type),
+                  onChanged: (value, type) {
+                    if (value == null) return;
+                    ref
+                        .read(analyticsNotifierProvider.notifier)
+                        .setDate(value, type);
+                  },
                   initDate: date,
                   enableTime: false,
                   isYearSelected: period == DateType.year,
