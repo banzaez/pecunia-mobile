@@ -174,7 +174,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final accentColor = isIncome
-        ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759))
+        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
         : (isDark ? Colors.white : Colors.black87);
 
     final cardBgColor = isDark

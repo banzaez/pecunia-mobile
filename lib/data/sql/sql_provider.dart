@@ -6,6 +6,9 @@ import 'dart:io' as io;
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLProvider {
+  SQLProvider({String? databasePath}) : _customDatabasePath = databasePath;
+
+  final String? _customDatabasePath;
   late sql.Database _database;
   sql.Database get database => _database;
 
@@ -24,8 +27,12 @@ class SQLProvider {
   Future<void> init() async {
     isLoading = true;
 
-    final dir = await sql.getDatabasesPath();
-    _databasePath = '$dir/$filename';
+    if (_customDatabasePath != null) {
+      _databasePath = _customDatabasePath;
+    } else {
+      final dir = await sql.getDatabasesPath();
+      _databasePath = '$dir/$filename';
+    }
 
     final db = await sql.openDatabase(
       _databasePath,
@@ -52,7 +59,8 @@ class SQLProvider {
   Future<String> createBackupSnapshot() async {
     final tempDir = await io.Directory.systemTemp.createTemp('pecunia_backup');
     final backupPath = '${tempDir.path}/backup_export.db';
-    await _database.execute("VACUUM INTO '$backupPath'");
+    final escapedPath = backupPath.replaceAll("'", "''");
+    await _database.execute("VACUUM INTO '$escapedPath'");
     return backupPath;
   }
 }

@@ -13,16 +13,19 @@ void main() {
   });
 
   late SQLProvider sqlProvider;
+  late Directory tempDir;
 
   setUp(() async {
-    sqlProvider = SQLProvider();
+    tempDir = await Directory.systemTemp.createTemp('pecunia_sql_provider_test_');
+    sqlProvider = SQLProvider(databasePath: '${tempDir.path}/pecunia.db');
     await sqlProvider.init();
   });
 
   tearDown(() async {
-    final path = sqlProvider.databasePath;
     await sqlProvider.close();
-    await deleteDatabase(path);
+    if (await tempDir.exists()) {
+      await tempDir.delete(recursive: true);
+    }
   });
 
   test('init creates default wallet', () async {

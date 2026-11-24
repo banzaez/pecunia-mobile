@@ -117,7 +117,9 @@ class _SettingTransactionSheetState
             ),
             AppSpaces.v16,
             PickDate(
-              onChanged: (value, type) => _ctrl.setDatetime(value!),
+              onChanged: (value, type) {
+                if (value != null) _ctrl.setDatetime(value);
+              },
               initDate: _ctrl.datetime,
             ),
             AppSpaces.v32,

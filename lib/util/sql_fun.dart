@@ -3,15 +3,20 @@ import 'package:intl/intl.dart';
 import 'package:pecunia/models/finance_categories.dart';
 import 'package:pecunia/models/finance_category.dart';
 
-DateTime toDateTime(String value) => DateTime.parse(value);
+final CurrencyService _currencyService = CurrencyService();
+final DateFormat _sqlDateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
 
-String fromDateTime(DateTime value) => DateFormat("yyyy-MM-ddTHH:mm:ssZ").format(value);
+DateTime toDateTime(String value) => DateTime.parse(
+      value.endsWith('Z') ? value.substring(0, value.length - 1) : value,
+    );
+
+String fromDateTime(DateTime value) => _sqlDateFormat.format(value);
 
 int? fromCategory(FinanceCategory? category) => category?.id;
 
 FinanceCategory? toCategory(int? value) =>
     value == null ? null : FinanceCategories.getCategoryById(value);
 
-Currency? toCurrency(String value) => CurrencyService().findByCode(value);
+Currency? toCurrency(String value) => _currencyService.findByCode(value);
 
 String fromCurrency(Currency? currency) => currency?.code ?? "";

@@ -1,21 +1,28 @@
 import 'package:intl/intl.dart';
 
 extension DateTimeExtension on DateTime {
+  static final Map<String, DateFormat> _formatCache = {};
+
   String get _locale => Intl.getCurrentLocale();
 
-  String get formatDDMMYYYY => DateFormat("dd.MM.yyyy", _locale).format(this);
+  DateFormat _formatter(String pattern) => _formatCache.putIfAbsent(
+        '$pattern|$_locale',
+        () => DateFormat(pattern, _locale),
+      );
 
-  String get formatDDMMSYYYY => DateFormat("dd.MM yyyy", _locale).format(this);
+  String get formatDDMMYYYY => _formatter("dd.MM.yyyy").format(this);
 
-  String get formatDDMMM => DateFormat("dd MMM", _locale).format(this);
+  String get formatDDMMSYYYY => _formatter("dd.MM yyyy").format(this);
 
-  String get formatMMMM => DateFormat("MMMM", _locale).format(this);
+  String get formatDDMMM => _formatter("dd MMM").format(this);
 
-  String get formatHourMin => DateFormat("HH:mm", _locale).format(this);
+  String get formatMMMM => _formatter("MMMM").format(this);
 
-  String get formatYYYYMMDD => DateFormat("yyyy.MM.dd", _locale).format(this);
+  String get formatHourMin => _formatter("HH:mm").format(this);
 
-  String toFormat(String format) => DateFormat(format, _locale).format(this);
+  String get formatYYYYMMDD => _formatter("yyyy.MM.dd").format(this);
+
+  String toFormat(String format) => _formatter(format).format(this);
 
   // --------------------------------------------------------------------------------------------
 
@@ -38,9 +45,18 @@ extension DateTimeExtension on DateTime {
 
   // --------------------------------------------------------------------------------------------
 
-  bool get isToday => DateTime.now().difference(startOfDay).inDays == 0;
+  bool get isToday {
+    final now = DateTime.now();
+    return year == now.year && month == now.month && day == now.day;
+  }
 
-  bool get isYesterday => DateTime.now().difference(startOfDay).inDays == 1;
+  bool get isYesterday {
+    final now = DateTime.now();
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    return year == yesterday.year &&
+        month == yesterday.month &&
+        day == yesterday.day;
+  }
 
   int get daysInMonth => DateTime(year, month + 1, 0).day;
 }

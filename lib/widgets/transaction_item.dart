@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/transaction.dart';
+import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/util/app_spaces.dart';
 import 'package:pecunia/util/category_icon_helper.dart';
@@ -15,15 +16,11 @@ class TransactionItem extends StatelessWidget {
     required this.transaction,
     required this.isRoundUp,
     required this.onDelete,
-
-    /// Если true, убирает горизонтальные отступы контейнера (для встроенных списков).
-    this.edgeToEdge = false,
   });
 
   final Transaction transaction;
   final bool isRoundUp;
   final Future<bool> Function() onDelete;
-  final bool edgeToEdge;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +29,7 @@ class TransactionItem extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final amountColor = isIncome
-        ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759))
+        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
         : (isDark ? Colors.white : Colors.black87);
 
     final iconColor = isDark ? Colors.white70 : Colors.black87;

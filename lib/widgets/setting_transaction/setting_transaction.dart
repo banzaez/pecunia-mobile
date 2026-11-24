@@ -8,10 +8,7 @@ import 'package:pecunia/widgets/setting_transaction/setting_transaction_sheet.da
 import 'package:pecunia/widgets/transfer/transfer.dart';
 
 class SettingTransaction extends StatelessWidget {
-  const SettingTransaction({super.key, this.transaction, this.onChange});
-
-  final ValueChanged? onChange;
-  final Transaction? transaction;
+  const SettingTransaction({super.key});
 
   @override
   Widget build(BuildContext context) {

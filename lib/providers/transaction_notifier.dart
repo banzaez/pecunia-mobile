@@ -104,6 +104,8 @@ class TransactionNotifier extends _$TransactionNotifier {
       final total = results[1] as int;
       final analyticsTotal = results[2] as AnalyticsTotal;
 
+      if (state.walletId != walletId) return;
+
       state = state.copyWith(
         isLoading: false,
         transactions: list,
@@ -126,15 +128,17 @@ class TransactionNotifier extends _$TransactionNotifier {
     }
 
     _loadMoreInFlight = true;
+    final walletId = state.walletId;
     state = state.copyWith(isLoadingMore: true, clearError: true);
     try {
       final sql = ref.read(sqlProviderProvider).transactions;
       final offset = state.transactions.length;
       final list = await sql.selectByWalletId(
-        state.walletId,
+        walletId,
         limit: TransactionState.pageSize,
         offset: offset,
       );
+      if (state.walletId != walletId) return;
       final merged = [...state.transactions, ...list];
       state = state.copyWith(
         transactions: merged,

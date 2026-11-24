@@ -6,6 +6,7 @@ import 'package:pecunia/screen/analytics/widgets/analytics_bottom_overlay.dart';
 import 'package:pecunia/screen/analytics/widgets/analytics_category_list.dart';
 import 'package:pecunia/screen/analytics/widgets/analytics_top_overlay.dart';
 import 'package:pecunia/widgets/custom_app_bar.dart';
+import 'package:pecunia/widgets/provider_error_listener.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
@@ -14,16 +15,14 @@ class AnalyticsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
-    ref.listen<String?>(analyticsNotifierProvider.select((s) => s.error), (
-      prev,
-      next,
-    ) {
-      if (next == null || next == prev) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(next), backgroundColor: Colors.red),
-      );
-      ref.read(analyticsNotifierProvider.notifier).clearError();
-    });
+    listenProviderError(
+      ref,
+      context,
+      provider: analyticsNotifierProvider,
+      selectError: (state) => (state as AnalyticsState?)?.error,
+      clearError: () =>
+          ref.read(analyticsNotifierProvider.notifier).clearError(),
+    );
 
     return Scaffold(
       appBar: CustomAppBar(title: l10n.analyticsTitle),

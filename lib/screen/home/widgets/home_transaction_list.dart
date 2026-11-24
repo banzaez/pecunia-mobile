@@ -160,7 +160,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
         dayTotal.formatSumCustom(roundUp: widget.isRoundUp);
     // Используем Apple Green для доходных дней, нейтральный для расходных
     final accentColor = dayTotal > 0
-        ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759))
+        ? (isDark ? AppColors.incomeBrightDark : AppColors.incomeBright)
         : dayTotal < 0
         ? (isDark ? Colors.white70 : Colors.black54)
         : (isDark ? Colors.white38 : Colors.black38);
@@ -278,7 +278,6 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
               transaction: transaction,
               isRoundUp: widget.isRoundUp,
               onDelete: () => _deleteTransaction(transaction.id),
-              edgeToEdge: true,
             ),
           );
         }

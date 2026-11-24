@@ -52,17 +52,21 @@ class BackupNotifier extends Notifier<BackupState> {
   BackupState build() {
     final sqlProvider = ref.read(sqlProviderProvider);
     Future.microtask(() async {
-      final file = File(sqlProvider.databasePath);
-      final sizeKb = (await file.length()) ~/ 1024;
-      state = state.copyWith(filename: sqlProvider.filename, sizeKb: sizeKb);
+      try {
+        final file = File(sqlProvider.databasePath);
+        final sizeKb = await file.exists() ? (await file.length()) ~/ 1024 : 0;
+        state = state.copyWith(filename: sqlProvider.filename, sizeKb: sizeKb);
+      } catch (_) {}
     });
     return const BackupState();
   }
 
   Future<void> _refreshSize() async {
-    final file = File(ref.read(sqlProviderProvider).databasePath);
-    final sizeKb = (await file.length()) ~/ 1024;
-    state = state.copyWith(sizeKb: sizeKb);
+    try {
+      final file = File(ref.read(sqlProviderProvider).databasePath);
+      final sizeKb = await file.exists() ? (await file.length()) ~/ 1024 : 0;
+      state = state.copyWith(sizeKb: sizeKb);
+    } catch (_) {}
   }
 
   Future<void> _refreshAll() async {
@@ -74,17 +78,16 @@ class BackupNotifier extends Notifier<BackupState> {
 
   Future<void> archiving() async {
     state = state.copyWith(isLoading: true, clearSnack: true);
+    File? backupFile;
     try {
       final sqlProvider = ref.read(sqlProviderProvider);
       final backupPath = await sqlProvider.createBackupSnapshot();
-      final backupFile = File(backupPath);
+      backupFile = File(backupPath);
 
       final savedPath = await FilePicker.saveFile(
         fileName: "pecunia_backup_${DateTime.now().toFormat("yyyyMMdd")}.db",
         bytes: await backupFile.readAsBytes(),
       );
-
-      if (await backupFile.exists()) await backupFile.delete();
 
       if (savedPath == null) {
         state = state.copyWith(
@@ -106,14 +109,22 @@ class BackupNotifier extends Notifier<BackupState> {
         snackMessage: '__error__',
         isError: true,
       );
+    } finally {
+      if (backupFile != null && await backupFile.parent.exists()) {
+        await backupFile.parent.delete(recursive: true);
+      }
     }
   }
 
   Future<bool> recovery() async {
     final result = await FilePicker.pickFiles();
-    if (result == null) return false;
+    if (result.isEmpty) return false;
 
-    final path = result.first.path!;
+    final path = result.single.path;
+    if (path == null) {
+      state = state.copyWith(snackMessage: '__format_error__', isError: true);
+      return false;
+    }
     final backupFile = File(path);
 
     if (!await isSqliteFile(backupFile)) {

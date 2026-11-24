@@ -29,6 +29,14 @@ class _AnalyticsGraphState extends ConsumerState<AnalyticsGraph> {
   double? _oldValue;
 
   @override
+  void didUpdateWidget(covariant AnalyticsGraph oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.totalSum != widget.totalSum) {
+      _oldValue = oldWidget.totalSum;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -49,8 +57,7 @@ class _AnalyticsGraphState extends ConsumerState<AnalyticsGraph> {
         ? widget.data[selectedIndex].total
         : widget.totalSum;
 
-    final double beginValue = _oldValue ?? targetValue;
-    _oldValue = targetValue;
+    final double beginValue = hasSelection ? targetValue : (_oldValue ?? targetValue);
 
     return RepaintBoundary(
       child: Stack(

@@ -55,8 +55,10 @@ class TransferController extends ChangeNotifier {
   void changeWallet() {
     exchangeRate.number = 1;
     differentCurrencies =
-        (_from != null && _to != null && _from?.currency != _to?.currency);
-    errorWallet = _from?.id == _to?.id ? '__wallet_error__' : null;
+        (_from != null && _to != null && _from?.currency?.code != _to?.currency?.code);
+    errorWallet = (_from != null && _to != null && _from?.id == _to?.id)
+        ? '__wallet_error__'
+        : null;
 
     if (differentCurrencies) {
       amount.clear();
