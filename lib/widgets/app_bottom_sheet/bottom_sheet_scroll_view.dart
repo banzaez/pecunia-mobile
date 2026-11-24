@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Scrollable body for bottom sheets with keyboard-friendly defaults.
 class BottomSheetScrollView extends StatelessWidget {
@@ -8,7 +8,7 @@ class BottomSheetScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: child,
-      );
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    child: child,
+  );
 }

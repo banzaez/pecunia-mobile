@@ -34,14 +34,13 @@ class BackupState {
     String? snackMessage,
     bool? isError,
     bool clearSnack = false,
-  }) =>
-      BackupState(
-        filename: filename ?? this.filename,
-        sizeKb: sizeKb ?? this.sizeKb,
-        isLoading: isLoading ?? this.isLoading,
-        snackMessage: clearSnack ? null : (snackMessage ?? this.snackMessage),
-        isError: isError ?? this.isError,
-      );
+  }) => BackupState(
+    filename: filename ?? this.filename,
+    sizeKb: sizeKb ?? this.sizeKb,
+    isLoading: isLoading ?? this.isLoading,
+    snackMessage: clearSnack ? null : (snackMessage ?? this.snackMessage),
+    isError: isError ?? this.isError,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -88,13 +87,25 @@ class BackupNotifier extends Notifier<BackupState> {
       if (await backupFile.exists()) await backupFile.delete();
 
       if (savedPath == null) {
-        state = state.copyWith(isLoading: false, snackMessage: '__cancelled__', isError: false);
+        state = state.copyWith(
+          isLoading: false,
+          snackMessage: '__cancelled__',
+          isError: false,
+        );
         return;
       }
 
-      state = state.copyWith(isLoading: false, snackMessage: '__saved__', isError: false);
+      state = state.copyWith(
+        isLoading: false,
+        snackMessage: '__saved__',
+        isError: false,
+      );
     } catch (e) {
-      state = state.copyWith(isLoading: false, snackMessage: '__error__', isError: true);
+      state = state.copyWith(
+        isLoading: false,
+        snackMessage: '__error__',
+        isError: true,
+      );
     }
   }
 
@@ -102,7 +113,7 @@ class BackupNotifier extends Notifier<BackupState> {
     final result = await FilePicker.pickFiles();
     if (result == null) return false;
 
-    final path = result.files.single.path!;
+    final path = result.first.path!;
     final backupFile = File(path);
 
     if (!await isSqliteFile(backupFile)) {
@@ -118,12 +129,20 @@ class BackupNotifier extends Notifier<BackupState> {
       await sqlProvider.init();
       await _refreshAll();
       await _refreshSize();
-      state = state.copyWith(isLoading: false, snackMessage: '__restored__', isError: false);
+      state = state.copyWith(
+        isLoading: false,
+        snackMessage: '__restored__',
+        isError: false,
+      );
       return true;
     } catch (e) {
       final sqlProvider = ref.read(sqlProviderProvider);
       await sqlProvider.init();
-      state = state.copyWith(isLoading: false, snackMessage: '__error__', isError: true);
+      state = state.copyWith(
+        isLoading: false,
+        snackMessage: '__error__',
+        isError: true,
+      );
       return false;
     }
   }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 
@@ -22,27 +22,26 @@ Future<bool?> showConfirmDialog(
   required String cancelLabel,
   Color confirmColor = Colors.red,
   VoidCallback? onConfirm,
-}) =>
-    showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(cancelLabel, style: AppTextStyle.text16w600()),
-          ),
-          TextButton(
-            onPressed: () {
-              onConfirm?.call();
-              Navigator.of(ctx).pop(true);
-            },
-            child: Text(
-              confirmLabel,
-              style: AppTextStyle.text16w600(color: confirmColor),
-            ),
-          ),
-        ],
+}) => showDialog<bool>(
+  context: context,
+  builder: (ctx) => AlertDialog(
+    title: Text(title),
+    content: Text(content),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.of(ctx).pop(false),
+        child: Text(cancelLabel, style: AppTextStyle.text16w600()),
       ),
-    );
+      TextButton(
+        onPressed: () {
+          onConfirm?.call();
+          Navigator.of(ctx).pop(true);
+        },
+        child: Text(
+          confirmLabel,
+          style: AppTextStyle.text16w600(color: confirmColor),
+        ),
+      ),
+    ],
+  ),
+);

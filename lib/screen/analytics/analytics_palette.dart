@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/models/analytics_filter.dart';
 
 abstract final class AnalyticsPalette {
@@ -38,5 +38,6 @@ abstract final class AnalyticsPalette {
     };
   }
 
-  static Color colorAt(List<Color> palette, int index) => palette[index % palette.length];
+  static Color colorAt(List<Color> palette, int index) =>
+      palette[index % palette.length];
 }

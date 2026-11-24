@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/models/transaction_type.dart';
 import 'package:pecunia/styles/app_colors.dart';
 

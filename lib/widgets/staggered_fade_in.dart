@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Общий виджет для каскадной анимации появления (fade + slide).
 /// Централизует логику, которая ранее дублировалась в:
@@ -18,6 +18,7 @@ class StaggeredFadeIn extends StatefulWidget {
   final int index;
   final Duration maxDelay;
   final Duration delayPerItem;
+
   /// Анимация только для первых N элементов — снижает нагрузку при пагинации.
   final int maxAnimatedIndex;
 
@@ -46,18 +47,19 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
       ),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.15),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.easeOutCubic),
-      ),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.15), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 1.0, curve: Curves.easeOutCubic),
+          ),
+        );
 
     final rawDelay = widget.delayPerItem * widget.index;
-    final clampedMs = min(rawDelay.inMilliseconds, widget.maxDelay.inMilliseconds);
+    final clampedMs = min(
+      rawDelay.inMilliseconds,
+      widget.maxDelay.inMilliseconds,
+    );
     Future.delayed(Duration(milliseconds: clampedMs), () {
       if (mounted) _controller.forward();
     });
@@ -77,10 +79,7 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
 
     return FadeTransition(
       opacity: _opacityAnimation,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: widget.child,
-      ),
+      child: SlideTransition(position: _slideAnimation, child: widget.child),
     );
   }
 }

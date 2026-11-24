@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:pecunia/widgets/fields/base_field.dart';
 
@@ -32,25 +32,33 @@ class NumberField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BaseField(
-        controller: controller,
-        initialValue: initialValue?.toString(),
-        autofocus: autofocus,
-        enabled: enabled,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'(^\d*[\.,]?\d{0,' '$decimal})')),
-        ],
-        hintText: hintText,
-        showLabel: showLabel,
-        labelText: labelText,
-        errorText: errorText,
-        validator: validator,
-        onChanged: (value) => onChanged?.call(num.tryParse(value.replaceAll(",", ".")) ?? 0),
-      );
+    controller: controller,
+    initialValue: initialValue?.toString(),
+    autofocus: autofocus,
+    enabled: enabled,
+    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+    inputFormatters: [
+      FilteringTextInputFormatter.allow(
+        RegExp(
+          r'(^\d*[\.,]?\d{0,'
+          '$decimal})',
+        ),
+      ),
+    ],
+    hintText: hintText,
+    showLabel: showLabel,
+    labelText: labelText,
+    errorText: errorText,
+    validator: validator,
+    onChanged: (value) =>
+        onChanged?.call(num.tryParse(value.replaceAll(",", ".")) ?? 0),
+  );
 }
 
 class NumberEditingController extends TextEditingController {
   num get number => num.tryParse(super.text.replaceAll(",", ".")) ?? 0;
 
-  set number(num? value) => (value == null || value == 0) ? super.clear() : super.text = value.toString();
+  set number(num? value) => (value == null || value == 0)
+      ? super.clear()
+      : super.text = value.toString();
 }

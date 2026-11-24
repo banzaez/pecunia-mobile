@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/styles/app_panel_style.dart';
 
 /// Градиентное затемнение края прокручиваемого списка.

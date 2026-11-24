@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
@@ -14,14 +14,15 @@ import 'package:pecunia/widgets/setting_wallet/setting_wallet.dart';
 import 'package:pecunia/screen/home/widgets/home_header_button.dart';
 import 'package:pecunia/widgets/list_edge_fade.dart';
 
-
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homeNotifierProvider);
-    final isRoundUp = ref.watch(settingsNotifierProvider.select((s) => s.isRoundUp));
+    final isRoundUp = ref.watch(
+      settingsNotifierProvider.select((s) => s.isRoundUp),
+    );
 
     return HomeErrorListener(
       child: homeState.isInitializing
@@ -41,9 +42,7 @@ class HomeScreen extends ConsumerWidget {
       leadingWidth: 56,
       leading: Padding(
         padding: const EdgeInsets.only(left: 8),
-        child: Center(
-          child: SettingWallet(update: homeState.currentWallet),
-        ),
+        child: Center(child: SettingWallet(update: homeState.currentWallet)),
       ),
       title: const CurrentWallet(),
       centerTitle: true,
@@ -100,10 +99,7 @@ class HomeScreenBody extends StatelessWidget {
           right: 0,
           bottom: 0,
           height: bottomFadeHeight,
-          child: ListEdgeFade(
-            height: bottomFadeHeight,
-            forBottomNav: true,
-          ),
+          child: ListEdgeFade(height: bottomFadeHeight, forBottomNav: true),
         ),
         const Positioned(
           left: 0,

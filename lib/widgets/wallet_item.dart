@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/wallet.dart';
@@ -26,20 +26,29 @@ class WalletItem extends ConsumerWidget {
             style: AppTextStyle.text14w600(color: Colors.white60),
           ),
         ),
-        title: Text.rich(TextSpan(
-          children: [
-            TextSpan(text: "${l10n.walletItemName}: ", style: AppTextStyle.text12w400()),
-            TextSpan(text: wallet.name),
-          ],
-        )),
+        title: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: "${l10n.walletItemName}: ",
+                style: AppTextStyle.text12w400(),
+              ),
+              TextSpan(text: wallet.name),
+            ],
+          ),
+        ),
         subtitle: wallet.description.isNotEmpty
-            ? Text.rich(TextSpan(
-                children: [
-                  TextSpan(
-                      text: "${l10n.walletItemDescription}: ", style: AppTextStyle.text12w400()),
-                  TextSpan(text: wallet.description),
-                ],
-              ))
+            ? Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "${l10n.walletItemDescription}: ",
+                      style: AppTextStyle.text12w400(),
+                    ),
+                    TextSpan(text: wallet.description),
+                  ],
+                ),
+              )
             : null,
         trailing: isEditing
             ? IconButton(

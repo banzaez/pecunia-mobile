@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,15 +8,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => AppBar(
-        leading: context.canPop()
-            ? IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back_ios_new),
-              )
-            : null,
-        title: Text(title),
-        centerTitle: true,
-      );
+    leading: context.canPop()
+        ? IconButton(
+            onPressed: () => context.pop(),
+            icon: const Icon(Icons.arrow_back_ios_new),
+          )
+        : null,
+    title: Text(title),
+    centerTitle: true,
+  );
 
   @override
   Size get preferredSize => const Size.fromHeight(60);

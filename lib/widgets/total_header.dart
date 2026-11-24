@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/analytics_total.dart';
@@ -56,7 +56,7 @@ class TotalHeader extends StatelessWidget {
                   color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
-                )
+                ),
               ],
       ),
       child: ClipRRect(
@@ -67,10 +67,17 @@ class TotalHeader extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () => context.push(AppRoute.analytics.path),
-              splashColor: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
-              highlightColor: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.02),
+              splashColor: (isDark ? Colors.white : Colors.black).withValues(
+                alpha: 0.05,
+              ),
+              highlightColor: (isDark ? Colors.white : Colors.black).withValues(
+                alpha: 0.02,
+              ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -88,7 +95,9 @@ class TotalHeader extends StatelessWidget {
                     Divider(
                       height: 1,
                       thickness: 0.5,
-                      color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06),
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : Colors.black.withValues(alpha: 0.06),
                     ),
                     const SizedBox(height: 10),
                     // Middle row: Balance, Incomes, Expenses (All in one row)
@@ -101,7 +110,9 @@ class TotalHeader extends StatelessWidget {
                             children: [
                               Text(
                                 showBalance
-                                    ? total.total.formatSumCustom(roundUp: isRoundUp)
+                                    ? total.total.formatSumCustom(
+                                        roundUp: isRoundUp,
+                                      )
                                     : '••••',
                                 style: AppTextStyle.text15w600(
                                   color: isDark ? Colors.white : Colors.black87,
@@ -114,7 +125,9 @@ class TotalHeader extends StatelessWidget {
                               Text(
                                 l10n.totalSum,
                                 style: AppTextStyle.text10w400(
-                                  color: isDark ? Colors.white38 : Colors.black38,
+                                  color: isDark
+                                      ? Colors.white38
+                                      : Colors.black38,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -127,7 +140,9 @@ class TotalHeader extends StatelessWidget {
                         Container(
                           width: 0.5,
                           height: 24,
-                          color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06),
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.08)
+                              : Colors.black.withValues(alpha: 0.06),
                         ),
                         // 2. Incomes
                         Expanded(
@@ -140,16 +155,22 @@ class TotalHeader extends StatelessWidget {
                                   Icon(
                                     Icons.arrow_upward_rounded,
                                     size: 12,
-                                    color: const Color(0xFF34C759).withValues(alpha: 0.8),
+                                    color: const Color(
+                                      0xFF34C759,
+                                    ).withValues(alpha: 0.8),
                                   ),
                                   const SizedBox(width: 2),
                                   Flexible(
                                     child: Text(
                                       showBalance
-                                          ? total.income.formatSumCustom(roundUp: isRoundUp)
+                                          ? total.income.formatSumCustom(
+                                              roundUp: isRoundUp,
+                                            )
                                           : '••••',
                                       style: AppTextStyle.text12w600(
-                                        color: isDark ? Colors.white : Colors.black87,
+                                        color: isDark
+                                            ? Colors.white
+                                            : Colors.black87,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -162,7 +183,9 @@ class TotalHeader extends StatelessWidget {
                               Text(
                                 l10n.incomesSum,
                                 style: AppTextStyle.text10w400(
-                                  color: isDark ? Colors.white38 : Colors.black38,
+                                  color: isDark
+                                      ? Colors.white38
+                                      : Colors.black38,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -175,7 +198,9 @@ class TotalHeader extends StatelessWidget {
                         Container(
                           width: 0.5,
                           height: 24,
-                          color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06),
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.08)
+                              : Colors.black.withValues(alpha: 0.06),
                         ),
                         // 3. Expenses
                         Expanded(
@@ -188,16 +213,22 @@ class TotalHeader extends StatelessWidget {
                                   Icon(
                                     Icons.arrow_downward_rounded,
                                     size: 12,
-                                    color: const Color(0xFFFF3B30).withValues(alpha: 0.8),
+                                    color: const Color(
+                                      0xFFFF3B30,
+                                    ).withValues(alpha: 0.8),
                                   ),
                                   const SizedBox(width: 2),
                                   Flexible(
                                     child: Text(
                                       showBalance
-                                          ? total.expense.abs().formatSumCustom(roundUp: isRoundUp)
+                                          ? total.expense.abs().formatSumCustom(
+                                              roundUp: isRoundUp,
+                                            )
                                           : '••••',
                                       style: AppTextStyle.text12w600(
-                                        color: isDark ? Colors.white : Colors.black87,
+                                        color: isDark
+                                            ? Colors.white
+                                            : Colors.black87,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -210,7 +241,9 @@ class TotalHeader extends StatelessWidget {
                               Text(
                                 l10n.expensesSum,
                                 style: AppTextStyle.text10w400(
-                                  color: isDark ? Colors.white38 : Colors.black38,
+                                  color: isDark
+                                      ? Colors.white38
+                                      : Colors.black38,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -225,7 +258,9 @@ class TotalHeader extends StatelessWidget {
                     Divider(
                       height: 1,
                       thickness: 0.5,
-                      color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06),
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : Colors.black.withValues(alpha: 0.06),
                     ),
                     const SizedBox(height: 8),
                     // Bottom row: Clickable Analytics link

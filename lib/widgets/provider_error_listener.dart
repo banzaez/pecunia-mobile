@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/providers/wallet_notifier.dart';
@@ -20,7 +20,10 @@ void listenProviderError(
     final message = formatError?.call(error, l10n) ?? error;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${l10n.dataLoadError}: $message', style: AppTextStyle.text14w400()),
+        content: Text(
+          '${l10n.dataLoadError}: $message',
+          style: AppTextStyle.text14w400(),
+        ),
         backgroundColor: Colors.red,
       ),
     );

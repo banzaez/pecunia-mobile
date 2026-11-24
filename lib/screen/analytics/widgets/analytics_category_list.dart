@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
@@ -23,8 +23,12 @@ class AnalyticsCategoryList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final category = ref.watch(analyticsNotifierProvider.select((s) => s.category));
-    final subcategory = ref.watch(analyticsNotifierProvider.select((s) => s.subcategory));
+    final category = ref.watch(
+      analyticsNotifierProvider.select((s) => s.category),
+    );
+    final subcategory = ref.watch(
+      analyticsNotifierProvider.select((s) => s.subcategory),
+    );
     final filter = ref.watch(analyticsNotifierProvider.select((s) => s.filter));
     final locale = Localizations.localeOf(context).toString();
     final periodStr = ref.watch(
@@ -49,10 +53,7 @@ class AnalyticsCategoryList extends ConsumerWidget {
     final subcategoryByParent = _groupSubcategories(subcategory);
 
     return ListView.builder(
-      padding: EdgeInsets.only(
-        top: topPadding,
-        bottom: bottomPadding,
-      ),
+      padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
       clipBehavior: Clip.none,
       itemCount: category.length,
       itemBuilder: (_, index) {
@@ -71,13 +72,16 @@ class AnalyticsCategoryList extends ConsumerWidget {
           index: index,
           totalSum: totalSum,
           categoryColor: AnalyticsPalette.colorAt(palette, index),
-          matchingSubcategories: subcategoryByParent[analytics.category?.id] ?? const [],
+          matchingSubcategories:
+              subcategoryByParent[analytics.category?.id] ?? const [],
         );
       },
     );
   }
 
-  static Map<int, List<Analytics>> _groupSubcategories(List<Analytics> subcategories) {
+  static Map<int, List<Analytics>> _groupSubcategories(
+    List<Analytics> subcategories,
+  ) {
     final map = <int, List<Analytics>>{};
     for (final subcat in subcategories) {
       final id = subcat.category?.id;

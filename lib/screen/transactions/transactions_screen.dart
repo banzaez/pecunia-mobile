@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/finance_categories.dart';
@@ -86,7 +86,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     await ref.read(transactionNotifierProvider.notifier).deleteSQL(id);
     final success = ref.read(transactionNotifierProvider).error == null;
     if (success && mounted) {
-      setState(() => _transactions.removeWhere((transaction) => transaction.id == id));
+      setState(
+        () => _transactions.removeWhere((transaction) => transaction.id == id),
+      );
     }
     return success;
   }
@@ -98,7 +100,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final query = _searchQuery.toLowerCase().trim();
     return _transactions.where((t) {
       final categoryName = t.category?.localizedName(l10n).toLowerCase() ?? '';
-      final subcategoryName = t.subcategory?.localizedName(l10n).toLowerCase() ?? '';
+      final subcategoryName =
+          t.subcategory?.localizedName(l10n).toLowerCase() ?? '';
       final desc = t.description.toLowerCase();
       final amount = t.amount.toString();
       final amountFormatted = t.amount.abs().toString();
@@ -114,7 +117,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final isRoundUp = ref.watch(settingsNotifierProvider.select((s) => s.isRoundUp));
+    final isRoundUp = ref.watch(
+      settingsNotifierProvider.select((s) => s.isRoundUp),
+    );
     return Scaffold(
       appBar: CustomAppBar(title: l10n.transactionsTitle),
       body: _list(isRoundUp, l10n),
@@ -157,20 +162,23 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final category = FinanceCategories.getCategoryById(widget.args.categoryId);
 
     // Вычисляем суммарную информацию по отфильтрованным транзакциям
-    final totalAmount = filtered.fold<double>(0, (sum, item) => sum + item.amount);
-    final isIncome = totalAmount != 0 
-        ? totalAmount > 0 
+    final totalAmount = filtered.fold<double>(
+      0,
+      (sum, item) => sum + item.amount,
+    );
+    final isIncome = totalAmount != 0
+        ? totalAmount > 0
         : FinanceCategories.incomeCategories.any((c) => c.id == category?.id);
 
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final accentColor = isIncome 
-        ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759)) 
+    final accentColor = isIncome
+        ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759))
         : (isDark ? Colors.white : Colors.black87);
 
-    final cardBgColor = isDark 
-        ? Colors.white.withValues(alpha: 0.015) 
+    final cardBgColor = isDark
+        ? Colors.white.withValues(alpha: 0.015)
         : Colors.white.withValues(alpha: 0.7);
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.05)
@@ -187,13 +195,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               color: cardBgColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: borderColor),
-              boxShadow: isDark ? null : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.02),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                )
-              ],
+              boxShadow: isDark
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: Row(
               children: [
@@ -250,10 +260,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      (totalAmount > 0 ? "+" : "") + totalAmount.formatSumCustom(roundUp: isRoundUp),
-                      style: AppTextStyle.text18w700(
-                        color: accentColor,
-                      ),
+                      (totalAmount > 0 ? "+" : "") +
+                          totalAmount.formatSumCustom(roundUp: isRoundUp),
+                      style: AppTextStyle.text18w700(color: accentColor),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -275,10 +284,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
           child: Container(
             height: 48,
             decoration: BoxDecoration(
-              color: isDark ? Colors.white.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.015),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.02)
+                  : Colors.black.withValues(alpha: 0.015),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.black.withValues(alpha: 0.03),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.04)
+                    : Colors.black.withValues(alpha: 0.03),
               ),
             ),
             child: TextField(
@@ -341,11 +354,13 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     );
   }
 
-  Widget _emptyState(AppLocalizations l10n, {required bool isSearchEmpty}) =>
-      EmptyStateView(
-        icon: isSearchEmpty ? Icons.search_off_rounded : Icons.receipt_long_rounded,
-        title: isSearchEmpty ? l10n.emptySearchTitle : l10n.emptyTransactionsTitle,
-        subtitle: isSearchEmpty ? l10n.emptySearchDesc : l10n.emptyTransactionsDesc,
-        accentColor: isSearchEmpty ? Colors.grey : AppColors.accentIndigo,
-      );
+  Widget _emptyState(
+    AppLocalizations l10n, {
+    required bool isSearchEmpty,
+  }) => EmptyStateView(
+    icon: isSearchEmpty ? Icons.search_off_rounded : Icons.receipt_long_rounded,
+    title: isSearchEmpty ? l10n.emptySearchTitle : l10n.emptyTransactionsTitle,
+    subtitle: isSearchEmpty ? l10n.emptySearchDesc : l10n.emptyTransactionsDesc,
+    accentColor: isSearchEmpty ? Colors.grey : AppColors.accentIndigo,
+  );
 }

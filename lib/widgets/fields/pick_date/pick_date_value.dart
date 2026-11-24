@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/util/ext_datetime.dart';
@@ -22,18 +22,20 @@ class PickDateValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: () {
-          onTap(date);
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : AppColors.backgroundContent(context),
-            borderRadius: AppBorderStyle.borderRadius,
-          ),
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.all(4),
-          child: Text(date.toFormat(format), style: textStyle),
-        ),
-      );
+    onTap: () {
+      onTap(date);
+      Navigator.of(context).pop();
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.primary
+            : AppColors.backgroundContent(context),
+        borderRadius: AppBorderStyle.borderRadius,
+      ),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.all(4),
+      child: Text(date.toFormat(format), style: textStyle),
+    ),
+  );
 }

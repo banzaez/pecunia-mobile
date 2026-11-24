@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
 /// Стили системных панелей (status bar, navigation bar) в соответствии с темой.
 abstract final class AppSystemUi {
-  static Future<void> configure() => SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.edgeToEdge,
-      );
+  static Future<void> configure() =>
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   static SystemUiOverlayStyle overlayFor(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
@@ -17,7 +16,9 @@ abstract final class AppSystemUi {
       statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
       systemNavigationBarColor: barColor,
       systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: isDark
+          ? Brightness.light
+          : Brightness.dark,
       systemNavigationBarContrastEnforced: false,
     );
   }

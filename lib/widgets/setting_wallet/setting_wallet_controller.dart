@@ -1,10 +1,13 @@
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/models/wallet.dart';
 
 /// Чистый ChangeNotifier — заменяет GetxController для SettingWallet формы.
 class SettingWalletController extends ChangeNotifier {
-  SettingWalletController({required Wallet? wallet, Currency? defaultCurrency}) {
+  SettingWalletController({
+    required Wallet? wallet,
+    Currency? defaultCurrency,
+  }) {
     this.wallet = wallet ?? Wallet.empty();
     _init(defaultCurrency);
   }

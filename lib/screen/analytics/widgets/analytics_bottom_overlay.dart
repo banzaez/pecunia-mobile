@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/analytics_filter.dart';
@@ -18,9 +18,15 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
     final filter = ref.watch(analyticsNotifierProvider.select((s) => s.filter));
     final date = ref.watch(analyticsNotifierProvider.select((s) => s.date));
     final period = ref.watch(analyticsNotifierProvider.select((s) => s.period));
-    final valuesYear = ref.watch(analyticsNotifierProvider.select((s) => s.valuesYear));
-    final valuesMonth = ref.watch(analyticsNotifierProvider.select((s) => s.valuesMonth));
-    final valuesDay = ref.watch(analyticsNotifierProvider.select((s) => s.valuesDay));
+    final valuesYear = ref.watch(
+      analyticsNotifierProvider.select((s) => s.valuesYear),
+    );
+    final valuesMonth = ref.watch(
+      analyticsNotifierProvider.select((s) => s.valuesMonth),
+    );
+    final valuesDay = ref.watch(
+      analyticsNotifierProvider.select((s) => s.valuesDay),
+    );
     final baseColor = appOverlayBaseColor(context);
     final panelColor = appPanelColor(context);
 
@@ -32,10 +38,7 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                baseColor.withValues(alpha: 0.0),
-                panelColor,
-              ],
+              colors: [baseColor.withValues(alpha: 0.0), panelColor],
             ),
           ),
           child: const SizedBox(height: 24, width: double.infinity),
@@ -54,8 +57,9 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppSwitch(
-                  onChange: (value) =>
-                      ref.read(analyticsNotifierProvider.notifier).setFilter(value),
+                  onChange: (value) => ref
+                      .read(analyticsNotifierProvider.notifier)
+                      .setFilter(value),
                   values: List.generate(
                     AnalyticsFilter.values.length,
                     (i) => AppSwitchValue(
@@ -64,16 +68,17 @@ class AnalyticsBottomOverlay extends ConsumerWidget {
                       color: i == 0
                           ? Colors.green
                           : i == 1
-                              ? Colors.red
-                              : null,
+                          ? Colors.red
+                          : null,
                     ),
                   ),
                   value: filter,
                 ),
                 AppSpaces.v16,
                 PickDate(
-                  onChanged: (value, type) =>
-                      ref.read(analyticsNotifierProvider.notifier).setDate(value!, type),
+                  onChanged: (value, type) => ref
+                      .read(analyticsNotifierProvider.notifier)
+                      .setDate(value!, type),
                   initDate: date,
                   enableTime: false,
                   isYearSelected: period == DateType.year,

@@ -1,12 +1,17 @@
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/providers/settings_notifier.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 
 class CurrencyField extends ConsumerWidget {
-  const CurrencyField({super.key, required this.onChange, required this.currency, this.errorText});
+  const CurrencyField({
+    super.key,
+    required this.onChange,
+    required this.currency,
+    this.errorText,
+  });
 
   final ValueChanged<Currency> onChange;
   final Currency? currency;
@@ -22,9 +27,7 @@ class CurrencyField extends ConsumerWidget {
         showSearchField: true,
         showCurrencyName: true,
         showCurrencyCode: true,
-        favorite: [
-          settings.currency?.code ?? "",
-        ],
+        favorite: [settings.currency?.code ?? ""],
         onSelect: onChange,
       ),
       child: Column(
@@ -47,7 +50,10 @@ class CurrencyField extends ConsumerWidget {
           if (errorText != null)
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 4),
-              child: Text(errorText!, style: AppTextStyle.text12w400(color: Colors.red)),
+              child: Text(
+                errorText!,
+                style: AppTextStyle.text12w400(color: Colors.red),
+              ),
             ),
         ],
       ),

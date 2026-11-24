@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/util/app_spaces.dart';
 import 'package:pecunia/util/ext_datetime.dart';
 import 'package:pecunia/widgets/fields/pick_date/pick_date_field.dart';
@@ -75,63 +75,63 @@ class PickDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [_date(), if (enableTime) _time()],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [_date(), if (enableTime) _time()],
+  );
 
   Widget _date() => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          PickDateField(
-            onChanged: (value) => onChanged(value, DateType.year),
-            type: DateType.year,
-            initDate: initDate,
-            format: formatYear,
-            values: _resolvedValuesYear,
-            isSelected: isYearSelected,
-          ),
-          AppSpaces.h8,
-          PickDateField(
-            onChanged: (value) => onChanged(value, DateType.month),
-            type: DateType.month,
-            initDate: initDate,
-            format: formatMonth,
-            values: _resolvedValuesMonth,
-            isSelected: isMonthSelected,
-          ),
-          AppSpaces.h8,
-          PickDateField(
-            onChanged: (value) => onChanged(value, DateType.day),
-            type: DateType.day,
-            initDate: initDate,
-            format: formatDay,
-            values: _resolvedValuesDay,
-            isSelected: isDaySelected,
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      PickDateField(
+        onChanged: (value) => onChanged(value, DateType.year),
+        type: DateType.year,
+        initDate: initDate,
+        format: formatYear,
+        values: _resolvedValuesYear,
+        isSelected: isYearSelected,
+      ),
+      AppSpaces.h8,
+      PickDateField(
+        onChanged: (value) => onChanged(value, DateType.month),
+        type: DateType.month,
+        initDate: initDate,
+        format: formatMonth,
+        values: _resolvedValuesMonth,
+        isSelected: isMonthSelected,
+      ),
+      AppSpaces.h8,
+      PickDateField(
+        onChanged: (value) => onChanged(value, DateType.day),
+        type: DateType.day,
+        initDate: initDate,
+        format: formatDay,
+        values: _resolvedValuesDay,
+        isSelected: isDaySelected,
+      ),
+    ],
+  );
 
   Widget _time() => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppSpaces.h16,
-          PickDateField(
-            onChanged: (value) => onChanged(value, DateType.hour),
-            type: DateType.hour,
-            initDate: initDate,
-            format: _formatHour,
-            values: _valuesHour,
-            isSelected: false,
-          ),
-          AppSpaces.h8,
-          PickDateField(
-            onChanged: (value) => onChanged(value, DateType.minute),
-            type: DateType.minute,
-            initDate: initDate,
-            format: _formatMinute,
-            values: _valuesMinute,
-            isSelected: false,
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      AppSpaces.h16,
+      PickDateField(
+        onChanged: (value) => onChanged(value, DateType.hour),
+        type: DateType.hour,
+        initDate: initDate,
+        format: _formatHour,
+        values: _valuesHour,
+        isSelected: false,
+      ),
+      AppSpaces.h8,
+      PickDateField(
+        onChanged: (value) => onChanged(value, DateType.minute),
+        type: DateType.minute,
+        initDate: initDate,
+        format: _formatMinute,
+        values: _valuesMinute,
+        isSelected: false,
+      ),
+    ],
+  );
 }

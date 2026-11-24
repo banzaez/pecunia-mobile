@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'settings_notifier.g.dart';
@@ -29,13 +29,12 @@ class SettingsState {
     ThemeMode? themeMode,
     bool clearLocale = false,
     bool clearCurrency = false,
-  }) =>
-      SettingsState(
-        locale: clearLocale ? null : (locale ?? this.locale),
-        currency: clearCurrency ? null : (currency ?? this.currency),
-        isRoundUp: isRoundUp ?? this.isRoundUp,
-        themeMode: themeMode ?? this.themeMode,
-      );
+  }) => SettingsState(
+    locale: clearLocale ? null : (locale ?? this.locale),
+    currency: clearCurrency ? null : (currency ?? this.currency),
+    isRoundUp: isRoundUp ?? this.isRoundUp,
+    themeMode: themeMode ?? this.themeMode,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -69,7 +68,9 @@ class SettingsNotifier extends _$SettingsNotifier {
     final localeStr = prefs.getString(_localeKey);
     if (localeStr != null) {
       final parts = localeStr.split('_');
-      locale = parts.length > 1 ? Locale(parts.first, parts.last) : Locale(parts.first);
+      locale = parts.length > 1
+          ? Locale(parts.first, parts.last)
+          : Locale(parts.first);
     }
 
     // Read currency
@@ -82,7 +83,11 @@ class SettingsNotifier extends _$SettingsNotifier {
     // Read theme (string with legacy int migration)
     final themeMode = _readThemeMode(prefs);
 
-    return SettingsState(locale: locale, currency: currency, themeMode: themeMode);
+    return SettingsState(
+      locale: locale,
+      currency: currency,
+      themeMode: themeMode,
+    );
   }
 
   ThemeMode _readThemeMode(SharedPreferences prefs) {

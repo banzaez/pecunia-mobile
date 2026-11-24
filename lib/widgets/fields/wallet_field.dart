@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/wallet.dart';
 import 'package:pecunia/styles/app_border_style.dart';
@@ -21,13 +21,13 @@ class WalletField extends StatelessWidget {
               decoration: AppBorderStyle.fieldBox(context),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(child: Text(l10n.walletFieldEmpty)),
-                    const Icon(Icons.arrow_drop_up),
-                  ],
-                ),
-              )
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(child: Text(l10n.walletFieldEmpty)),
+                  const Icon(Icons.arrow_drop_up),
+                ],
+              ),
+            )
           : WalletItem(wallet: initValue!, isEditing: false),
     );
   }

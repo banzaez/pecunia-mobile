@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/models/wallet.dart';
 import 'package:pecunia/widgets/fields/number_field.dart';
 
@@ -54,7 +54,8 @@ class TransferController extends ChangeNotifier {
 
   void changeWallet() {
     exchangeRate.number = 1;
-    differentCurrencies = (_from != null && _to != null && _from?.currency != _to?.currency);
+    differentCurrencies =
+        (_from != null && _to != null && _from?.currency != _to?.currency);
     errorWallet = _from?.id == _to?.id ? '__wallet_error__' : null;
 
     if (differentCurrencies) {
@@ -72,12 +73,13 @@ class TransferController extends ChangeNotifier {
   void changeAmount() {
     if (!differentCurrencies) return;
 
-    final sum = (divisionSign
-            ? exchangeRate.number == 0
-                ? 0.0
-                : amount.number / exchangeRate.number
-            : amount.number * exchangeRate.number)
-        .toStringAsFixed(2);
+    final sum =
+        (divisionSign
+                ? exchangeRate.number == 0
+                      ? 0.0
+                      : amount.number / exchangeRate.number
+                : amount.number * exchangeRate.number)
+            .toStringAsFixed(2);
     total.number = double.tryParse(sum) ?? 0;
     checkEnableDone();
     notifyListeners();

@@ -1,5 +1,5 @@
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/wallet.dart';
@@ -13,11 +13,7 @@ import 'package:pecunia/util/sheet_save.dart';
 import 'package:pecunia/widgets/setting_wallet/setting_wallet_controller.dart';
 
 class SettingWalletSheet extends ConsumerStatefulWidget {
-  const SettingWalletSheet({
-    super.key,
-    this.wallet,
-    this.defaultCurrency,
-  });
+  const SettingWalletSheet({super.key, this.wallet, this.defaultCurrency});
 
   final Wallet? wallet;
   final Currency? defaultCurrency;

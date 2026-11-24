@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/screen/analytics/analytics_controller.dart';
@@ -14,16 +14,16 @@ class AnalyticsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
-    ref.listen<String?>(
-      analyticsNotifierProvider.select((s) => s.error),
-      (prev, next) {
-        if (next == null || next == prev) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next), backgroundColor: Colors.red),
-        );
-        ref.read(analyticsNotifierProvider.notifier).clearError();
-      },
-    );
+    ref.listen<String?>(analyticsNotifierProvider.select((s) => s.error), (
+      prev,
+      next,
+    ) {
+      if (next == null || next == prev) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(next), backgroundColor: Colors.red),
+      );
+      ref.read(analyticsNotifierProvider.notifier).clearError();
+    });
 
     return Scaffold(
       appBar: CustomAppBar(title: l10n.analyticsTitle),
@@ -37,8 +37,9 @@ class AnalyticsScreenBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasCategories =
-        ref.watch(analyticsNotifierProvider.select((s) => s.category.isNotEmpty));
+    final hasCategories = ref.watch(
+      analyticsNotifierProvider.select((s) => s.category.isNotEmpty),
+    );
 
     const topFadeHeight = 24.0;
     const graphHeight = 220.0;

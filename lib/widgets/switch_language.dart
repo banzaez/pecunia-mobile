@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/providers/settings_notifier.dart';
 import 'package:pecunia/styles/app_colors.dart';
@@ -27,9 +27,9 @@ const _languages = [
 
 extension _FlagEmoji on String {
   String get toFlag => toUpperCase().replaceAllMapped(
-        RegExp(r'[A-Z]'),
-        (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397),
-      );
+    RegExp(r'[A-Z]'),
+    (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -39,7 +39,9 @@ class SwitchLanguage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(settingsNotifierProvider).locale ?? Localizations.localeOf(context);
+    final currentLocale =
+        ref.watch(settingsNotifierProvider).locale ??
+        Localizations.localeOf(context);
 
     return DropdownButton<Locale>(
       onChanged: (value) {
@@ -54,7 +56,11 @@ class SwitchLanguage extends ConsumerWidget {
       padding: EdgeInsets.zero,
       underline: const SizedBox.shrink(),
       elevation: 1,
-      icon: const Icon(Icons.arrow_drop_down, color: AppColors.disable, size: 26),
+      icon: const Icon(
+        Icons.arrow_drop_down,
+        color: AppColors.disable,
+        size: 26,
+      ),
     );
   }
 
@@ -65,14 +71,12 @@ class SwitchLanguage extends ConsumerWidget {
     return _languages.first.locale;
   }
 
-  DropdownMenuItem<Locale> _item({required _LangItem item}) => DropdownMenuItem<Locale>(
+  DropdownMenuItem<Locale> _item({required _LangItem item}) =>
+      DropdownMenuItem<Locale>(
         value: item.locale,
         child: Row(
           children: [
-            Text(
-              item.flag.toFlag,
-              style: const TextStyle(fontSize: 22),
-            ),
+            Text(item.flag.toFlag, style: const TextStyle(fontSize: 22)),
             AppSpaces.h16,
             Text(item.name, style: AppTextStyle.text14w600()),
           ],

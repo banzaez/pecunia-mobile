@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 
@@ -55,31 +55,31 @@ class BaseField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        onChanged: onChanged,
-        autofocus: autofocus,
-        autofillHints: autofillHints,
-        focusNode: focusNode,
-        enabled: enabled,
-        controller: controller,
-        initialValue: initialValue,
-        validator: validator,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        minLines: minLines,
-        maxLength: maxLength,
-        maxLines: maxLines,
-        obscureText: obscureText,
-        scrollPadding: const EdgeInsets.only(bottom: 88),
-        decoration: AppBorderStyle.inputDecoration(
-          context,
-          prefixIcon: prefixIcon,
-          prefixText: prefixText,
-          suffixIcon: suffixIcon,
-          labelText: showLabel ? (labelText ?? hintText) : null,
-          hintText: hintText,
-          errorText: errorText,
-          helperText: helperText,
-        ),
-      );
+      onChanged: onChanged,
+      autofocus: autofocus,
+      autofillHints: autofillHints,
+      focusNode: focusNode,
+      enabled: enabled,
+      controller: controller,
+      initialValue: initialValue,
+      validator: validator,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      minLines: minLines,
+      maxLength: maxLength,
+      maxLines: maxLines,
+      obscureText: obscureText,
+      scrollPadding: const EdgeInsets.only(bottom: 88),
+      decoration: AppBorderStyle.inputDecoration(
+        context,
+        prefixIcon: prefixIcon,
+        prefixText: prefixText,
+        suffixIcon: suffixIcon,
+        labelText: showLabel ? (labelText ?? hintText) : null,
+        hintText: hintText,
+        errorText: errorText,
+        helperText: helperText,
+      ),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/models/transaction.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
@@ -40,7 +40,8 @@ class HomeTransactionList extends ConsumerStatefulWidget {
   final double bottomPadding;
 
   @override
-  ConsumerState<HomeTransactionList> createState() => _HomeTransactionListState();
+  ConsumerState<HomeTransactionList> createState() =>
+      _HomeTransactionListState();
 }
 
 class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
@@ -82,7 +83,10 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
 
     void addCurrentGroup() {
       if (dayTransactions.isEmpty || currentDay == null) return;
-      final dayTotal = dayTransactions.fold<double>(0, (sum, t) => sum + t.amount);
+      final dayTotal = dayTransactions.fold<double>(
+        0,
+        (sum, t) => sum + t.amount,
+      );
       list.add(DateHeaderItem(currentDay, dayTotal));
       for (final t in dayTransactions) {
         list.add(TransactionItemWrapper(t));
@@ -91,7 +95,11 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
     }
 
     for (final t in transactions) {
-      final tDate = DateTime(t.createdAt.year, t.createdAt.month, t.createdAt.day);
+      final tDate = DateTime(
+        t.createdAt.year,
+        t.createdAt.month,
+        t.createdAt.day,
+      );
       if (currentDay == null) {
         currentDay = tDate;
         dayTransactions.add(t);
@@ -108,7 +116,11 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
     return list;
   }
 
-  String _formatHeaderDate(DateTime date, AppLocalizations l10n, String locale) {
+  String _formatHeaderDate(
+    DateTime date,
+    AppLocalizations l10n,
+    String locale,
+  ) {
     if (date.isToday) {
       return l10n.dateToday;
     }
@@ -135,15 +147,23 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
     }
   }
 
-  Widget _dateHeaderWidget(DateTime date, double dayTotal, AppLocalizations l10n, String locale, bool isDark) {
+  Widget _dateHeaderWidget(
+    DateTime date,
+    double dayTotal,
+    AppLocalizations l10n,
+    String locale,
+    bool isDark,
+  ) {
     final formattedDate = _formatHeaderDate(date, l10n, locale);
-    final totalText = (dayTotal > 0 ? "+" : "") + dayTotal.formatSumCustom(roundUp: widget.isRoundUp);
+    final totalText =
+        (dayTotal > 0 ? "+" : "") +
+        dayTotal.formatSumCustom(roundUp: widget.isRoundUp);
     // Используем Apple Green для доходных дней, нейтральный для расходных
     final accentColor = dayTotal > 0
         ? (isDark ? const Color(0xFF30D158) : const Color(0xFF34C759))
         : dayTotal < 0
-            ? (isDark ? Colors.white70 : Colors.black54)
-            : (isDark ? Colors.white38 : Colors.black38);
+        ? (isDark ? Colors.white70 : Colors.black54)
+        : (isDark ? Colors.white38 : Colors.black38);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
@@ -163,9 +183,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
               if (dayTotal != 0)
                 Text(
                   totalText,
-                  style: AppTextStyle.text12w600(
-                    color: accentColor,
-                  ),
+                  style: AppTextStyle.text12w600(color: accentColor),
                 ),
             ],
           ),
@@ -173,7 +191,9 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
           Divider(
             height: 1,
             thickness: 0.5,
-            color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06),
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : Colors.black.withValues(alpha: 0.06),
           ),
         ],
       ),
@@ -181,22 +201,22 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
   }
 
   Widget _emptyState(AppLocalizations l10n) => EmptyStateView(
-        icon: Icons.receipt_long_rounded,
-        title: l10n.emptyHistoryTitle,
-        subtitle: l10n.emptyHistoryDesc,
-        accentColor: AppColors.accentIndigo,
-      );
+    icon: Icons.receipt_long_rounded,
+    title: l10n.emptyHistoryTitle,
+    subtitle: l10n.emptyHistoryDesc,
+    accentColor: AppColors.accentIndigo,
+  );
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<int?>(
-      homeNotifierProvider.select((s) => s.currentWallet?.id),
-      (prev, next) {
-        if (prev != next && _scrollController.hasClients) {
-          _scrollController.jumpTo(0);
-        }
-      },
-    );
+    ref.listen<int?>(homeNotifierProvider.select((s) => s.currentWallet?.id), (
+      prev,
+      next,
+    ) {
+      if (prev != next && _scrollController.hasClients) {
+        _scrollController.jumpTo(0);
+      }
+    });
 
     final transactions = ref.watch(
       transactionNotifierProvider.select((s) => s.transactions),
@@ -241,7 +261,13 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
         final item = listItems[index];
 
         if (item is DateHeaderItem) {
-          return _dateHeaderWidget(item.date, item.dayTotal, l10n, locale, isDark);
+          return _dateHeaderWidget(
+            item.date,
+            item.dayTotal,
+            l10n,
+            locale,
+            isDark,
+          );
         } else if (item is TransactionItemWrapper) {
           final transaction = item.transaction;
           return StaggeredFadeIn(

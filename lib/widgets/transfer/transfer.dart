@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/widgets/app_bottom_sheet.dart';
 import 'package:pecunia/widgets/transfer/transfer_sheet.dart';
 
@@ -7,7 +7,7 @@ class Transfer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton.filled(
-        onPressed: () => appBottomSheet(context, const TransferSheet()),
-        icon: const Icon(Icons.compare_arrows),
-      );
+    onPressed: () => appBottomSheet(context, const TransferSheet()),
+    icon: const Icon(Icons.compare_arrows),
+  );
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/analytics.dart';
@@ -30,13 +30,15 @@ class AnalyticsCategoryItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final isIncome = analytics.total > 0;
-    final accentColor = isIncome ? const Color(0xFF2E7D32) : const Color(0xFFC62828);
+    final accentColor = isIncome
+        ? const Color(0xFF2E7D32)
+        : const Color(0xFFC62828);
 
     final selectedIndex = ref.watch(selectedCategoryIndexProvider);
     final isSelected = selectedIndex == index;
 
     final displayColor = categoryColor ?? accentColor;
-    
+
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -45,15 +47,19 @@ class AnalyticsCategoryItem extends ConsumerWidget {
     if (totalSum != null && totalSum! > 0) {
       percentage = (analytics.total.abs() / totalSum!) * 100;
     }
-    
+
     // Sleek card background (slightly highlighted if selected)
     final cardBgColor = isSelected
-        ? (isDark ? displayColor.withValues(alpha: 0.1) : displayColor.withValues(alpha: 0.04))
+        ? (isDark
+              ? displayColor.withValues(alpha: 0.1)
+              : displayColor.withValues(alpha: 0.04))
         : (isDark ? Colors.white.withValues(alpha: 0.03) : Colors.white);
 
     final borderColor = isSelected
         ? displayColor.withValues(alpha: 0.5)
-        : (isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.05));
+        : (isDark
+              ? Colors.white.withValues(alpha: 0.06)
+              : Colors.black.withValues(alpha: 0.05));
 
     final borderWidth = isSelected ? 1.5 : 1.0;
 
@@ -63,15 +69,17 @@ class AnalyticsCategoryItem extends ConsumerWidget {
         color: cardBgColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor, width: borderWidth),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: isSelected 
-                ? displayColor.withValues(alpha: 0.08) 
-                : Colors.black.withValues(alpha: 0.015),
-            blurRadius: isSelected ? 10 : 6,
-            offset: const Offset(0, 3),
-          )
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: isSelected
+                      ? displayColor.withValues(alpha: 0.08)
+                      : Colors.black.withValues(alpha: 0.015),
+                  blurRadius: isSelected ? 10 : 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -80,8 +88,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
           child: InkWell(
             onTap: () {
               final current = ref.read(selectedCategoryIndexProvider);
-              ref.read(selectedCategoryIndexProvider.notifier).setIndex(
-                  current == index ? null : index);
+              ref
+                  .read(selectedCategoryIndexProvider.notifier)
+                  .setIndex(current == index ? null : index);
             },
             splashColor: displayColor.withValues(alpha: 0.08),
             highlightColor: displayColor.withValues(alpha: 0.04),
@@ -109,7 +118,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            CategoryIconHelper.getIcon(analytics.category?.name),
+                            CategoryIconHelper.getIcon(
+                              analytics.category?.name,
+                            ),
                             color: displayColor,
                             size: 16,
                           ),
@@ -146,9 +157,7 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                         children: [
                           Text(
                             (isIncome ? "+" : "") + analytics.total.formatSum,
-                            style: AppTextStyle.text15w600(
-                              color: accentColor,
-                            ),
+                            style: AppTextStyle.text15w600(color: accentColor),
                           ),
                           if (percentage > 0) ...[
                             const SizedBox(height: 1),
@@ -186,8 +195,8 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                           height: 3,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: isDark 
-                                ? Colors.white.withValues(alpha: 0.06) 
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.06)
                                 : Colors.black.withValues(alpha: 0.04),
                             borderRadius: BorderRadius.circular(1.5),
                           ),
@@ -211,8 +220,8 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                     const Divider(height: 1, thickness: 0.5),
                     const SizedBox(height: 8),
                     ...matchingSubcategories.map((subcat) {
-                      final subcatPercentage = analytics.total.abs() > 0 
-                          ? (subcat.total.abs() / analytics.total.abs()) * 100 
+                      final subcatPercentage = analytics.total.abs() > 0
+                          ? (subcat.total.abs() / analytics.total.abs()) * 100
                           : 0.0;
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 6),
@@ -223,7 +232,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                               children: [
                                 const SizedBox(width: 4),
                                 Icon(
-                                  CategoryIconHelper.getIcon(subcat.category?.name),
+                                  CategoryIconHelper.getIcon(
+                                    subcat.category?.name,
+                                  ),
                                   color: displayColor.withValues(alpha: 0.7),
                                   size: 13,
                                 ),
@@ -232,7 +243,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                                   child: Text(
                                     subcat.category?.localizedName(l10n) ?? "",
                                     style: AppTextStyle.text12w400(
-                                      color: isDark ? Colors.white70 : Colors.black87,
+                                      color: isDark
+                                          ? Colors.white70
+                                          : Colors.black87,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -248,7 +261,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                                 Text(
                                   "${subcatPercentage.toStringAsFixed(0)}%",
                                   style: AppTextStyle.text10w600(
-                                    color: isDark ? Colors.white38 : Colors.black38,
+                                    color: isDark
+                                        ? Colors.white38
+                                        : Colors.black38,
                                   ),
                                 ),
                               ],
@@ -262,9 +277,11 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                                     height: 2,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: isDark 
-                                          ? Colors.white.withValues(alpha: 0.04) 
-                                          : Colors.black.withValues(alpha: 0.03),
+                                      color: isDark
+                                          ? Colors.white.withValues(alpha: 0.04)
+                                          : Colors.black.withValues(
+                                              alpha: 0.03,
+                                            ),
                                       borderRadius: BorderRadius.circular(1),
                                     ),
                                   ),
@@ -273,7 +290,9 @@ class AnalyticsCategoryItem extends ConsumerWidget {
                                     child: Container(
                                       height: 2,
                                       decoration: BoxDecoration(
-                                        color: displayColor.withValues(alpha: 0.7),
+                                        color: displayColor.withValues(
+                                          alpha: 0.7,
+                                        ),
                                         borderRadius: BorderRadius.circular(1),
                                       ),
                                     ),

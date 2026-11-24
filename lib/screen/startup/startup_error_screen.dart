@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/styles/app_text_style.dart';
 import 'package:pecunia/styles/app_themes.dart';
 import 'package:pecunia/styles/app_system_ui.dart';
 
 class StartupErrorScreen extends StatelessWidget {
-  const StartupErrorScreen({super.key, required this.message, required this.onRetry});
+  const StartupErrorScreen({
+    super.key,
+    required this.message,
+    required this.onRetry,
+  });
 
   final String message;
   final VoidCallback onRetry;

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/screen/analytics/analytics_controller.dart';
@@ -21,10 +21,14 @@ class AnalyticsTopOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
-    final category = ref.watch(analyticsNotifierProvider.select((s) => s.category));
+    final category = ref.watch(
+      analyticsNotifierProvider.select((s) => s.category),
+    );
     final filter = ref.watch(analyticsNotifierProvider.select((s) => s.filter));
     final total = ref.watch(analyticsNotifierProvider.select((s) => s.total));
-    final isLoading = ref.watch(analyticsNotifierProvider.select((s) => s.isLoading));
+    final isLoading = ref.watch(
+      analyticsNotifierProvider.select((s) => s.isLoading),
+    );
     final periodStr = ref.watch(
       analyticsNotifierProvider.select((s) => s.periodStr(locale)),
     );
@@ -59,10 +63,14 @@ class AnalyticsTopOverlay extends ConsumerWidget {
                               if (details.primaryVelocity == null) return;
                               if (details.primaryVelocity! < 0) {
                                 // Swipe left -> Next period
-                                ref.read(analyticsNotifierProvider.notifier).shiftPeriod(1);
+                                ref
+                                    .read(analyticsNotifierProvider.notifier)
+                                    .shiftPeriod(1);
                               } else if (details.primaryVelocity! > 0) {
                                 // Swipe right -> Previous period
-                                ref.read(analyticsNotifierProvider.notifier).shiftPeriod(-1);
+                                ref
+                                    .read(analyticsNotifierProvider.notifier)
+                                    .shiftPeriod(-1);
                               }
                             },
                             child: AnalyticsGraph(
@@ -78,7 +86,9 @@ class AnalyticsTopOverlay extends ConsumerWidget {
                               child: SizedBox(
                                 width: 28,
                                 height: 28,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                             ),
                           ),
@@ -95,10 +105,7 @@ class AnalyticsTopOverlay extends ConsumerWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                panelColor,
-                baseColor.withValues(alpha: 0.0),
-              ],
+              colors: [panelColor, baseColor.withValues(alpha: 0.0)],
             ),
           ),
           child: SizedBox(height: fadeHeight, width: double.infinity),

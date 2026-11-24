@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/finance_categories.dart';
@@ -44,8 +44,9 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (_, _) {
-        final walletError =
-            _ctrl.errorWallet != null ? l10n.transferErrorWallet : null;
+        final walletError = _ctrl.errorWallet != null
+            ? l10n.transferErrorWallet
+            : null;
 
         return BottomSheetScrollView(
           child: Column(
@@ -93,7 +94,9 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
               AppSpaces.v32,
               BottomSheetActionRow(
                 action: ElevatedButton(
-                  onPressed: _ctrl.enableDone ? () => _onDone(context, l10n) : null,
+                  onPressed: _ctrl.enableDone
+                      ? () => _onDone(context, l10n)
+                      : null,
                   child: Text(l10n.transferDone),
                 ),
               ),
@@ -106,36 +109,36 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
   }
 
   Widget _exchangeRate(BuildContext context, AppLocalizations l10n) => Expanded(
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: _ctrl.toggleDivisionSign,
-              child: Container(
-                decoration: AppBorderStyle.fieldBox(context).copyWith(
-                  color: AppColors.backgroundContent(context),
-                ),
-                width: 48,
-                height: 48,
-                child: Center(
-                  child: Text(
-                    _ctrl.divisionSign ? "/" : "*",
-                    style: AppTextStyle.text18w400(),
-                  ),
-                ),
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: _ctrl.toggleDivisionSign,
+          child: Container(
+            decoration: AppBorderStyle.fieldBox(
+              context,
+            ).copyWith(color: AppColors.backgroundContent(context)),
+            width: 48,
+            height: 48,
+            child: Center(
+              child: Text(
+                _ctrl.divisionSign ? "/" : "*",
+                style: AppTextStyle.text18w400(),
               ),
             ),
-            AppSpaces.h8,
-            Flexible(
-              child: NumberField(
-                controller: _ctrl.exchangeRate,
-                decimal: 5,
-                enabled: _ctrl.differentCurrencies,
-                labelText: l10n.transferExchangeRate,
-              ),
-            ),
-          ],
+          ),
         ),
-      );
+        AppSpaces.h8,
+        Flexible(
+          child: NumberField(
+            controller: _ctrl.exchangeRate,
+            decimal: 5,
+            enabled: _ctrl.differentCurrencies,
+            labelText: l10n.transferExchangeRate,
+          ),
+        ),
+      ],
+    ),
+  );
 
   Future<void> _onDone(BuildContext context, AppLocalizations l10n) async {
     if (!_ctrl.isOk()) return;

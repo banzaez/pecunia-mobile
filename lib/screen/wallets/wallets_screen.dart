@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/providers/wallet_notifier.dart';
@@ -41,33 +41,31 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen> {
   // --------------------------------------------------------------------------------------------
 
   Widget _body(BuildContext context, AppLocalizations l10n) => Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const SettingWallet(),
-                TextButton.icon(
-                  onPressed: () => setState(() => _isEditing = !_isEditing),
-                  icon: Icon(
-                    _isEditing ? Icons.check : Icons.edit,
-                    color: AppColors.edit,
-                  ),
-                  label: Text(
-                    _isEditing ? l10n.transferDone : l10n.profileEdit,
-                    style: AppTextStyle.text14w600(color: AppColors.edit),
-                  ),
-                ),
-              ],
-            ),
-            AppSpaces.v16,
-            Expanded(
-              child: _listWallets(),
+            const SettingWallet(),
+            TextButton.icon(
+              onPressed: () => setState(() => _isEditing = !_isEditing),
+              icon: Icon(
+                _isEditing ? Icons.check : Icons.edit,
+                color: AppColors.edit,
+              ),
+              label: Text(
+                _isEditing ? l10n.transferDone : l10n.profileEdit,
+                style: AppTextStyle.text14w600(color: AppColors.edit),
+              ),
             ),
           ],
         ),
-      );
+        AppSpaces.v16,
+        Expanded(child: _listWallets()),
+      ],
+    ),
+  );
 
   // --------------------------------------------------------------------------------------------
 
@@ -79,10 +77,8 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen> {
       child: SingleChildScrollView(
         child: FlexBuilder(
           itemCount: wallets.length,
-          itemBuilder: (_, index) => WalletItem(
-            wallet: wallets[index],
-            isEditing: _isEditing,
-          ),
+          itemBuilder: (_, index) =>
+              WalletItem(wallet: wallets[index], isEditing: _isEditing),
         ),
       ),
     );

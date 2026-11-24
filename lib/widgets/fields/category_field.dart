@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/finance_categories.dart';
 import 'package:pecunia/models/finance_category.dart';
@@ -24,9 +24,11 @@ class CategoryField extends StatelessWidget {
   final String hint;
   final String? error;
 
-  List<FinanceCategory> get _items => items ?? (type == TransactionType.income
-      ? FinanceCategories.incomeCategories
-      : FinanceCategories.expenseCategories);
+  List<FinanceCategory> get _items =>
+      items ??
+      (type == TransactionType.income
+          ? FinanceCategories.incomeCategories
+          : FinanceCategories.expenseCategories);
 
   @override
   Widget build(BuildContext context) {
@@ -59,4 +61,3 @@ class CategoryField extends StatelessWidget {
         );
       });
 }
-

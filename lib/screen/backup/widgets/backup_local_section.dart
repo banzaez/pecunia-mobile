@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/screen/backup/backup_controller.dart';
@@ -29,7 +29,9 @@ class BackupLocalSection extends ConsumerWidget {
         SizedBox(
           width: 256,
           child: ElevatedButton(
-            onPressed: isBusy ? null : () => ref.read(backupNotifierProvider.notifier).archiving(),
+            onPressed: isBusy
+                ? null
+                : () => ref.read(backupNotifierProvider.notifier).archiving(),
             child: Text(l10n.backupArchiving),
           ),
         ),
@@ -37,14 +39,13 @@ class BackupLocalSection extends ConsumerWidget {
         SizedBox(
           width: 256,
           child: ElevatedButton(
-            onPressed: isBusy ? null : () => ref.read(backupNotifierProvider.notifier).recovery(),
+            onPressed: isBusy
+                ? null
+                : () => ref.read(backupNotifierProvider.notifier).recovery(),
             child: Text(l10n.backupRecovery),
           ),
         ),
-        if (isBusy) ...[
-          AppSpaces.v16,
-          const CircularProgressIndicator(),
-        ],
+        if (isBusy) ...[AppSpaces.v16, const CircularProgressIndicator()],
       ],
     );
   }
@@ -58,10 +59,10 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(value, style: AppTextStyle.text18w400()),
-          Text(hint, style: AppTextStyle.text14w400()),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(value, style: AppTextStyle.text18w400()),
+      Text(hint, style: AppTextStyle.text14w400()),
+    ],
+  );
 }

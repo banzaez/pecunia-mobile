@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
@@ -65,7 +65,7 @@ class DonateScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              
+
               // Почта
               _buildSectionTitle(context, l10n.donateContactAuthor),
               const SizedBox(height: 12),
@@ -85,7 +85,10 @@ class DonateScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
-                          const Icon(Icons.email_outlined, color: AppColors.accentIndigo),
+                          const Icon(
+                            Icons.email_outlined,
+                            color: AppColors.accentIndigo,
+                          ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Column(
@@ -94,14 +97,18 @@ class DonateScreen extends StatelessWidget {
                                 Text(
                                   'Email',
                                   style: AppTextStyle.text10w600(
-                                    color: isDark ? Colors.white38 : Colors.black38,
+                                    color: isDark
+                                        ? Colors.white38
+                                        : Colors.black38,
                                   ),
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
                                   AppConstants.supportEmail,
                                   style: AppTextStyle.text14w600(
-                                    color: isDark ? Colors.white70 : Colors.black87,
+                                    color: isDark
+                                        ? Colors.white70
+                                        : Colors.black87,
                                   ),
                                 ),
                               ],
@@ -214,11 +221,7 @@ class DonateScreen extends StatelessWidget {
       ),
       child: Center(
         child: icon != null
-            ? Icon(
-                icon,
-                color: color,
-                size: 20,
-              )
+            ? Icon(icon, color: color, size: 20)
             : Text(
                 symbol,
                 style: TextStyle(
@@ -252,7 +255,9 @@ class DonateScreen extends StatelessWidget {
                 Text(
                   name,
                   style: AppTextStyle.text14w700(
-                    color: isDark ? Colors.white.withValues(alpha: 0.87) : Colors.black87,
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.87)
+                        : Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -260,9 +265,7 @@ class DonateScreen extends StatelessWidget {
                   address,
                   style: AppTextStyle.text12w600(
                     color: isDark ? Colors.white54 : Colors.black54,
-                  ).copyWith(
-                    fontFamily: 'monospace',
-                  ),
+                  ).copyWith(fontFamily: 'monospace'),
                 ),
               ],
             ),

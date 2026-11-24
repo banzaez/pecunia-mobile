@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AppColors {
   AppColors._();
@@ -37,8 +37,12 @@ class AppColors {
   static const Color borderColor = Colors.grey;
 
   static Color background(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white;
+      Theme.of(context).brightness == Brightness.dark
+      ? Colors.black
+      : Colors.white;
 
   static Color backgroundContent(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.white10 : Colors.black12;
+      Theme.of(context).brightness == Brightness.dark
+      ? Colors.white10
+      : Colors.black12;
 }

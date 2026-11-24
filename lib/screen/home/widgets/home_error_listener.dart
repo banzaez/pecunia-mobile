@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
 import 'package:pecunia/providers/wallet_notifier.dart';
@@ -24,7 +24,8 @@ class HomeErrorListener extends ConsumerWidget {
       context,
       provider: transactionNotifierProvider,
       selectError: (state) => (state as TransactionState?)?.error,
-      clearError: () => ref.read(transactionNotifierProvider.notifier).clearError(),
+      clearError: () =>
+          ref.read(transactionNotifierProvider.notifier).clearError(),
     );
     return child;
   }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/util/app_spaces.dart';
 
 class ButtonSocial extends StatelessWidget {
@@ -15,15 +15,15 @@ class ButtonSocial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
-        onPressed: onPressed,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(icon, width: 24, height: 24),
-            AppSpaces.h24,
-            Text(label),
-            AppSpaces.h12,
-          ],
-        ),
-      );
+    onPressed: onPressed,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset(icon, width: 24, height: 24),
+        AppSpaces.h24,
+        Text(label),
+        AppSpaces.h12,
+      ],
+    ),
+  );
 }

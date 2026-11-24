@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 
 class BottomSheetActionRow extends StatelessWidget {
-  const BottomSheetActionRow({
-    super.key,
-    required this.action,
-    this.onClose,
-  });
+  const BottomSheetActionRow({super.key, required this.action, this.onClose});
 
   static const double buttonHeight = 48;
 
@@ -38,8 +34,9 @@ class BottomSheetActionRow extends StatelessWidget {
                 onPressed: onClose ?? () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppBorderStyle.fillColor(brightness),
-                  foregroundColor:
-                      Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                  foregroundColor: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.65),
                   elevation: 0,
                   shadowColor: Colors.transparent,
                   minimumSize: const Size(buttonHeight, buttonHeight),
@@ -48,7 +45,9 @@ class BottomSheetActionRow extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                     borderRadius: AppBorderStyle.borderRadius,
-                    side: BorderSide(color: AppBorderStyle.borderColor(brightness)),
+                    side: BorderSide(
+                      color: AppBorderStyle.borderColor(brightness),
+                    ),
                   ),
                 ),
                 child: const Icon(Icons.keyboard_arrow_down_rounded),
@@ -60,7 +59,9 @@ class BottomSheetActionRow extends StatelessWidget {
             child: Theme(
               data: Theme.of(context).copyWith(
                 elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: Theme.of(context).elevatedButtonTheme.style?.merge(actionButtonStyle),
+                  style: Theme.of(
+                    context,
+                  ).elevatedButtonTheme.style?.merge(actionButtonStyle),
                 ),
               ),
               child: action,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/transaction.dart';
@@ -29,7 +29,8 @@ class SettingTransactionSheet extends ConsumerStatefulWidget {
       _SettingTransactionSheetState();
 }
 
-class _SettingTransactionSheetState extends ConsumerState<SettingTransactionSheet> {
+class _SettingTransactionSheetState
+    extends ConsumerState<SettingTransactionSheet> {
   late SettingTransactionController _ctrl;
 
   @override
@@ -139,7 +140,8 @@ class _SettingTransactionSheetState extends ConsumerState<SettingTransactionShee
 
     await saveSheetAndPop(
       context: context,
-      validate: () => _ctrl.isOk(l10n.tranItemErrorAmount, l10n.tranItemErrorCategory),
+      validate: () =>
+          _ctrl.isOk(l10n.tranItemErrorAmount, l10n.tranItemErrorCategory),
       applyChanges: _ctrl.updateValues,
       persist: () async {
         final notifier = ref.read(transactionNotifierProvider.notifier);

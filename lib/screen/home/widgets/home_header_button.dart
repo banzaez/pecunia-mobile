@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class HomeHeaderButton extends StatelessWidget {
   const HomeHeaderButton({
@@ -28,11 +28,7 @@ class HomeHeaderButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onPressed,
-        child: SizedBox(
-          width: 40,
-          height: 40,
-          child: Icon(icon, size: 21),
-        ),
+        child: SizedBox(width: 40, height: 40, child: Icon(icon, size: 21)),
       ),
     );
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Color appPanelColor(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -7,4 +7,6 @@ Color appPanelColor(BuildContext context) {
 }
 
 Color appOverlayBaseColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white;
+    Theme.of(context).brightness == Brightness.dark
+    ? Colors.black
+    : Colors.white;

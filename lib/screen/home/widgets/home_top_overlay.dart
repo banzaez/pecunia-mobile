@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/providers/settings_notifier.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
@@ -13,10 +13,15 @@ class HomeTopOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showBalance =
-        ref.watch(homeNotifierProvider.select((s) => s.currentWallet?.showBalance ?? false));
-    final isRoundUp = ref.watch(settingsNotifierProvider.select((s) => s.isRoundUp));
-    final total = ref.watch(transactionNotifierProvider.select((s) => s.analyticsTotal));
+    final showBalance = ref.watch(
+      homeNotifierProvider.select((s) => s.currentWallet?.showBalance ?? false),
+    );
+    final isRoundUp = ref.watch(
+      settingsNotifierProvider.select((s) => s.isRoundUp),
+    );
+    final total = ref.watch(
+      transactionNotifierProvider.select((s) => s.analyticsTotal),
+    );
 
     final baseColor = appOverlayBaseColor(context);
     final panelColor = appPanelColor(context);
@@ -40,10 +45,7 @@ class HomeTopOverlay extends ConsumerWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                panelColor,
-                baseColor.withValues(alpha: 0.0),
-              ],
+              colors: [panelColor, baseColor.withValues(alpha: 0.0)],
             ),
           ),
           child: SizedBox(height: fadeHeight, width: double.infinity),

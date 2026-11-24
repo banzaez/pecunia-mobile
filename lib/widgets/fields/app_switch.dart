@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
@@ -22,13 +22,16 @@ class AppSwitch<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: AppBorderStyle.fieldBox(context),
-        height: 48,
-        width: width ?? double.infinity,
-        child: Row(
-          children: List.generate(values.length, (i) => Expanded(child: _button(values[i]))),
-        ),
-      );
+    decoration: AppBorderStyle.fieldBox(context),
+    height: 48,
+    width: width ?? double.infinity,
+    child: Row(
+      children: List.generate(
+        values.length,
+        (i) => Expanded(child: _button(values[i])),
+      ),
+    ),
+  );
 
   // --------------------------------------------------------------------------------------------
 
@@ -43,7 +46,9 @@ class AppSwitch<T> extends StatelessWidget {
       margin: const EdgeInsets.all(4),
       child: Text(
         item.label,
-        style: AppTextStyle.text14w600(color: isActive ? null : AppColors.disable),
+        style: AppTextStyle.text14w600(
+          color: isActive ? null : AppColors.disable,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -58,11 +63,7 @@ class AppSwitch<T> extends StatelessWidget {
 }
 
 class AppSwitchValue<T> {
-  AppSwitchValue({
-    required this.label,
-    required this.value,
-    this.color,
-  });
+  AppSwitchValue({required this.label, required this.value, this.color});
 
   final String label;
   final T value;

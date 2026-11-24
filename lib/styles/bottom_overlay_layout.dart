@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Общие константы нижних оверлеев (Home, Analytics).
 abstract final class BottomOverlayLayout {

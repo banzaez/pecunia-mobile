@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
@@ -18,7 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  static final Future<PackageInfo> _packageInfoFuture = PackageInfo.fromPlatform();
+  static final Future<PackageInfo> _packageInfoFuture =
+      PackageInfo.fromPlatform();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +35,8 @@ class ProfileScreen extends ConsumerWidget {
   Widget _body(BuildContext context, WidgetRef ref, AppLocalizations l10n) =>
       SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.sizeOf(context).height -
+          height:
+              MediaQuery.sizeOf(context).height -
               (MediaQuery.paddingOf(context).top +
                   MediaQuery.paddingOf(context).bottom +
                   kToolbarHeight),
@@ -59,7 +61,8 @@ class ProfileScreen extends ConsumerWidget {
       child: Column(
         children: [
           AppSwitch<ThemeMode>(
-            onChange: (value) => ref.read(settingsNotifierProvider.notifier).setThemeMode(value),
+            onChange: (value) =>
+                ref.read(settingsNotifierProvider.notifier).setThemeMode(value),
             values: [
               AppSwitchValue(label: l10n.light, value: ThemeMode.light),
               AppSwitchValue(label: l10n.dark, value: ThemeMode.dark),
@@ -69,7 +72,8 @@ class ProfileScreen extends ConsumerWidget {
           Text(l10n.profileTheme),
           AppSpaces.v16,
           CurrencyField(
-            onChange: (value) => ref.read(settingsNotifierProvider.notifier).setCurrency(value),
+            onChange: (value) =>
+                ref.read(settingsNotifierProvider.notifier).setCurrency(value),
             currency: settings.currency,
           ),
           Text(l10n.profileMainCurrency),
@@ -79,54 +83,57 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buttons(BuildContext context, AppLocalizations l10n) => Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            width: 256,
-            child: ElevatedButton(
-              onPressed: () => context.push(AppRoute.wallets.path),
-              child: Text(l10n.walletsButton),
-            ),
-          ),
-          AppSpaces.v16,
-          SizedBox(
-            width: 256,
-            child: ElevatedButton(
-              onPressed: () => context.push(AppRoute.backup.path),
-              child: Text(l10n.backupButton),
-            ),
-          ),
-          AppSpaces.v16,
-          SizedBox(
-            width: 256,
-            child: ElevatedButton(
-              onPressed: () => context.push(AppRoute.donate.path),
-              child: Text(l10n.profileDonate),
-            ),
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.max,
+    children: [
+      SizedBox(
+        width: 256,
+        child: ElevatedButton(
+          onPressed: () => context.push(AppRoute.wallets.path),
+          child: Text(l10n.walletsButton),
+        ),
+      ),
+      AppSpaces.v16,
+      SizedBox(
+        width: 256,
+        child: ElevatedButton(
+          onPressed: () => context.push(AppRoute.backup.path),
+          child: Text(l10n.backupButton),
+        ),
+      ),
+      AppSpaces.v16,
+      SizedBox(
+        width: 256,
+        child: ElevatedButton(
+          onPressed: () => context.push(AppRoute.donate.path),
+          child: Text(l10n.profileDonate),
+        ),
+      ),
+    ],
+  );
 
   Widget _support(BuildContext context, AppLocalizations l10n) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextButton(
-            onPressed: () => _launchUrl(context),
-            child: const Text(AppConstants.supportEmail),
-          ),
-          Text(l10n.profileSupport, style: AppTextStyle.text12w400(color: AppColors.disable)),
-          AppSpaces.v16,
-          FutureBuilder(
-            future: _packageInfoFuture,
-            builder: (_, snapshot) => snapshot.hasData
-                ? Text(
-                    "${snapshot.data!.packageName} ${snapshot.data!.version}",
-                    style: AppTextStyle.text12w400(color: AppColors.disable),
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      TextButton(
+        onPressed: () => _launchUrl(context),
+        child: const Text(AppConstants.supportEmail),
+      ),
+      Text(
+        l10n.profileSupport,
+        style: AppTextStyle.text12w400(color: AppColors.disable),
+      ),
+      AppSpaces.v16,
+      FutureBuilder(
+        future: _packageInfoFuture,
+        builder: (_, snapshot) => snapshot.hasData
+            ? Text(
+                "${snapshot.data!.packageName} ${snapshot.data!.version}",
+                style: AppTextStyle.text12w400(color: AppColors.disable),
+              )
+            : const SizedBox.shrink(),
+      ),
+    ],
+  );
 
   Future<void> _launchUrl(BuildContext context) async {
     final Uri url = Uri.parse("mailto:${AppConstants.supportEmail}");

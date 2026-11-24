@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 
 class DropdownField<T> extends StatelessWidget {
@@ -19,18 +19,15 @@ class DropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DropdownButtonFormField<T>(
-        onChanged: (value) {
-          if (value == null) return;
-          onChanged?.call(value);
-        },
-        decoration: AppBorderStyle.inputDecoration(
-          context,
-          errorText: errorText,
-        ),
-        hint: Text(hint),
-        items: items,
-        initialValue: value,
-        borderRadius: BorderRadius.circular(16),
-        icon: const Icon(Icons.keyboard_arrow_down_rounded),
-      );
+    onChanged: (value) {
+      if (value == null) return;
+      onChanged?.call(value);
+    },
+    decoration: AppBorderStyle.inputDecoration(context, errorText: errorText),
+    hint: Text(hint),
+    items: items,
+    initialValue: value,
+    borderRadius: BorderRadius.circular(16),
+    icon: const Icon(Icons.keyboard_arrow_down_rounded),
+  );
 }

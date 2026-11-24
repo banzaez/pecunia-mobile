@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/widgets/app_bottom_sheet/app_bottom_sheet_layout.dart';
 import 'package:pecunia/widgets/app_bottom_sheet/bottom_sheet_handle.dart';
@@ -36,9 +36,7 @@ Future<T?> appBottomSheet<T>(BuildContext context, Widget child) async =>
                 children: [
                   const BottomSheetHandle(),
                   const SizedBox(height: 8),
-                  Flexible(
-                    child: child,
-                  ),
+                  Flexible(child: child),
                 ],
               ),
             ),
