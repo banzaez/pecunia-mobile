@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/providers/settings_notifier.dart';
 import 'package:pecunia/router/app_router.dart';
@@ -17,9 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
-
-  static final Future<PackageInfo> _packageInfoFuture =
-      PackageInfo.fromPlatform();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -123,14 +119,9 @@ class ProfileScreen extends ConsumerWidget {
         style: AppTextStyle.text12w400(color: AppColors.disable),
       ),
       AppSpaces.v16,
-      FutureBuilder(
-        future: _packageInfoFuture,
-        builder: (_, snapshot) => snapshot.hasData
-            ? Text(
-                "${snapshot.data!.packageName} ${snapshot.data!.version}",
-                style: AppTextStyle.text12w400(color: AppColors.disable),
-              )
-            : const SizedBox.shrink(),
+      Text(
+        '${AppConstants.appName} ${AppConstants.appVersion}',
+        style: AppTextStyle.text12w400(color: AppColors.disable),
       ),
     ],
   );

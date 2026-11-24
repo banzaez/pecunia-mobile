@@ -1,5 +1,4 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_system_ui.dart';
@@ -7,8 +6,6 @@ import 'package:pecunia/styles/app_text_style.dart';
 
 class AppThemes {
   AppThemes._();
-
-  static final String? _fontFamily = GoogleFonts.openSans().fontFamily;
 
   static ThemeData get theme => ThemeData(
     brightness: Brightness.light,
@@ -36,7 +33,6 @@ class AppThemes {
       surface: Colors.white,
       onSurface: Colors.black,
     ),
-    fontFamily: _fontFamily,
     dialogTheme: DialogThemeData(backgroundColor: Colors.white),
     inputDecorationTheme: AppBorderStyle.decorationTheme(Brightness.light),
   );
@@ -67,7 +63,6 @@ class AppThemes {
       surface: Colors.black,
       onSurface: Colors.white,
     ),
-    fontFamily: _fontFamily,
     dialogTheme: DialogThemeData(backgroundColor: Colors.black),
     inputDecorationTheme: AppBorderStyle.decorationTheme(Brightness.dark),
   );
