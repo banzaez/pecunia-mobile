@@ -11,8 +11,8 @@ class TransferController extends ChangeNotifier {
   bool differentCurrencies = false;
   bool enableDone = false;
   bool divisionSign = false;
-
   bool hasWalletError = false;
+  bool _isUpdating = false;
 
   Wallet? _from;
   Wallet? get from => _from;
@@ -28,10 +28,15 @@ class TransferController extends ChangeNotifier {
     changeWallet();
   }
 
-  TransferController() {
+  TransferController({Wallet? initialFrom, Wallet? initialTo}) {
+    _from = initialFrom;
+    _to = initialTo;
     amount.addListener(_onAmountChanged);
     exchangeRate.addListener(_onAmountChanged);
     total.addListener(_onTotalChanged);
+    if (_from != null || _to != null) {
+      changeWallet();
+    }
   }
 
   @override
@@ -47,50 +52,85 @@ class TransferController extends ChangeNotifier {
 
   // ----------CHANGES---------------------------------------------------------------------------
 
+  void swapWallets() {
+    final prevFrom = _from;
+    _from = _to;
+    _to = prevFrom;
+    changeWallet();
+  }
+
   void toggleDivisionSign() {
     divisionSign = !divisionSign;
     changeAmount();
   }
 
   void changeWallet() {
-    exchangeRate.number = 1;
-    differentCurrencies =
-        (_from != null && _to != null && _from?.currency?.code != _to?.currency?.code);
-    hasWalletError =
-        _from != null && _to != null && _from?.id == _to?.id;
+    _isUpdating = true;
+    try {
+      exchangeRate.number = 1;
+      differentCurrencies =
+          _from != null &&
+          _to != null &&
+          _from?.currency?.code != _to?.currency?.code;
+      hasWalletError = _from != null && _to != null && _from?.id == _to?.id;
 
-    if (differentCurrencies) {
-      amount.clear();
-    } else {
-      total.clear();
+      if (differentCurrencies) {
+        if (amount.number <= 0 && total.number > 0) {
+          amount.number = total.number;
+        }
+        _recalculateTotalFromAmount();
+      } else {
+        amount.number = total.number;
+      }
+
+      checkEnableDone();
+    } finally {
+      _isUpdating = false;
     }
-
-    checkEnableDone();
     notifyListeners();
   }
 
-  void _onAmountChanged() => changeAmount();
+  void _onAmountChanged() {
+    if (_isUpdating) return;
+    changeAmount();
+  }
+
+  void _recalculateTotalFromAmount() {
+    final rate = exchangeRate.number;
+    final raw = divisionSign
+        ? (rate == 0 ? 0.0 : amount.number / rate)
+        : amount.number * rate;
+    total.number = double.tryParse(raw.toStringAsFixed(2)) ?? 0;
+  }
 
   void changeAmount() {
     if (!differentCurrencies) return;
 
-    final sum =
-        (divisionSign
-                ? exchangeRate.number == 0
-                      ? 0.0
-                      : amount.number / exchangeRate.number
-                : amount.number * exchangeRate.number)
-            .toStringAsFixed(2);
-    total.number = double.tryParse(sum) ?? 0;
-    checkEnableDone();
+    _isUpdating = true;
+    try {
+      _recalculateTotalFromAmount();
+      checkEnableDone();
+    } finally {
+      _isUpdating = false;
+    }
     notifyListeners();
   }
 
-  void _onTotalChanged() => changeTotal();
+  void _onTotalChanged() {
+    if (_isUpdating) return;
+    changeTotal();
+  }
 
   void changeTotal() {
-    if (!differentCurrencies) amount.number = total.number;
-    checkEnableDone();
+    _isUpdating = true;
+    try {
+      if (!differentCurrencies) {
+        amount.number = total.number;
+      }
+      checkEnableDone();
+    } finally {
+      _isUpdating = false;
+    }
     notifyListeners();
   }
 
@@ -101,10 +141,11 @@ class TransferController extends ChangeNotifier {
   // ----------IS OK-----------------------------------------------------------------------------
 
   bool isOk() {
+    if (_from == null || _to == null) return false;
     if (hasWalletError) return false;
-    if (amount.number == 0) return false;
-    if (differentCurrencies && exchangeRate.number == 0) return false;
-    if (total.number == 0) return false;
+    if (amount.number <= 0) return false;
+    if (differentCurrencies && exchangeRate.number <= 0) return false;
+    if (total.number <= 0) return false;
     return true;
   }
 }

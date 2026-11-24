@@ -9,11 +9,14 @@ class NumberField extends StatelessWidget {
   final num? initialValue;
   final String? hintText;
   final String? labelText;
+  final String? suffixText;
   final String? errorText;
   final bool enabled;
   final bool showLabel;
   final int decimal;
   final FormFieldValidator<String>? validator;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onFieldSubmitted;
 
   const NumberField({
     super.key,
@@ -23,11 +26,14 @@ class NumberField extends StatelessWidget {
     this.initialValue,
     this.hintText,
     this.labelText,
+    this.suffixText,
     this.errorText,
     this.enabled = true,
     this.showLabel = true,
     this.decimal = 2,
     this.validator,
+    this.textInputAction,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -48,8 +54,11 @@ class NumberField extends StatelessWidget {
     hintText: hintText,
     showLabel: showLabel,
     labelText: labelText,
+    suffixText: suffixText,
     errorText: errorText,
     validator: validator,
+    textInputAction: textInputAction,
+    onFieldSubmitted: onFieldSubmitted,
     onChanged: (value) =>
         onChanged?.call(num.tryParse(value.replaceAll(",", ".")) ?? 0),
   );

@@ -23,10 +23,13 @@ class BaseField extends StatelessWidget {
     this.hintText,
     this.helperText,
     this.prefixText,
+    this.suffixText,
     this.prefixIcon,
     this.suffixIcon,
     this.errorText,
     this.showLabel = true,
+    this.textInputAction,
+    this.onFieldSubmitted,
   });
 
   final ValueChanged<String>? onChanged;
@@ -47,10 +50,13 @@ class BaseField extends StatelessWidget {
   final String? hintText;
   final String? helperText;
   final String? prefixText;
+  final String? suffixText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? errorText;
   final bool showLabel;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +75,14 @@ class BaseField extends StatelessWidget {
       maxLength: maxLength,
       maxLines: maxLines,
       obscureText: obscureText,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       scrollPadding: const EdgeInsets.only(bottom: 88),
       decoration: AppBorderStyle.inputDecoration(
         context,
         prefixIcon: prefixIcon,
         prefixText: prefixText,
+        suffixText: suffixText,
         suffixIcon: suffixIcon,
         labelText: showLabel ? (labelText ?? hintText) : null,
         hintText: hintText,

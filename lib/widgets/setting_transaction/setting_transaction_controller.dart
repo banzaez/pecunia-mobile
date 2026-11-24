@@ -26,6 +26,9 @@ class SettingTransactionController extends ChangeNotifier {
   set category(FinanceCategory? value) {
     _category = value;
     _subcategory = null;
+    if (value != null) {
+      errorCategory = null;
+    }
     notifyListeners();
   }
 
@@ -39,7 +42,10 @@ class SettingTransactionController extends ChangeNotifier {
   TransactionType _type = TransactionType.income;
   TransactionType get type => _type;
   set type(TransactionType value) {
-    category = null;
+    if (_type == value) return;
+    _category = null;
+    _subcategory = null;
+    errorCategory = null;
     _type = value;
     notifyListeners();
   }
@@ -56,10 +62,19 @@ class SettingTransactionController extends ChangeNotifier {
     _subcategory = transaction.subcategory;
     description.text = transaction.description;
     datetime = transaction.createdAt;
+    amount.addListener(_onAmountChanged);
+  }
+
+  void _onAmountChanged() {
+    if (errorAmount != null && amount.number > 0) {
+      errorAmount = null;
+      notifyListeners();
+    }
   }
 
   @override
   void dispose() {
+    amount.removeListener(_onAmountChanged);
     amount.dispose();
     description.dispose();
     super.dispose();
@@ -71,12 +86,12 @@ class SettingTransactionController extends ChangeNotifier {
     transaction.amount = (amount.number * type.i).toDouble();
     transaction.category = _category;
     transaction.subcategory = _subcategory;
-    transaction.description = description.text;
+    transaction.description = description.text.trim();
     transaction.createdAt = datetime;
   }
 
   bool isOk(String amountError, String categoryError) {
-    errorAmount = amount.text.isEmpty ? amountError : null;
+    errorAmount = amount.number <= 0 ? amountError : null;
     errorCategory = _category == null ? categoryError : null;
     notifyListeners();
     return errorAmount == null && errorCategory == null;
@@ -84,6 +99,17 @@ class SettingTransactionController extends ChangeNotifier {
 
   void setDatetime(DateTime value) {
     datetime = value;
+    notifyListeners();
+  }
+
+  void setDatePreservingTime(DateTime targetDay) {
+    datetime = DateTime(
+      targetDay.year,
+      targetDay.month,
+      targetDay.day,
+      datetime.hour,
+      datetime.minute,
+    );
     notifyListeners();
   }
 }

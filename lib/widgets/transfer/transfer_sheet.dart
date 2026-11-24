@@ -1,9 +1,10 @@
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/models/finance_categories.dart';
 import 'package:pecunia/models/transaction.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
+import 'package:pecunia/providers/wallet_notifier.dart';
 import 'package:pecunia/styles/app_border_style.dart';
 import 'package:pecunia/styles/app_colors.dart';
 import 'package:pecunia/styles/app_text_style.dart';
@@ -29,7 +30,19 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
   @override
   void initState() {
     super.initState();
-    _ctrl = TransferController();
+    final activeWalletId = ref.read(transactionNotifierProvider).walletId;
+    final wallets = ref.read(walletNotifierProvider).wallets;
+    final initialFrom = wallets
+        .where((w) => w.id == activeWalletId)
+        .firstOrNull;
+    final initialTo = wallets.length == 2
+        ? wallets.where((w) => w.id != activeWalletId).firstOrNull
+        : null;
+
+    _ctrl = TransferController(
+      initialFrom: initialFrom,
+      initialTo: initialTo,
+    );
   }
 
   @override
@@ -47,6 +60,8 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
         final walletError = _ctrl.hasWalletError
             ? l10n.transferErrorWallet
             : null;
+        final singleCurrencySymbol =
+            _ctrl.to?.currency?.symbol ?? _ctrl.from?.currency?.symbol;
 
         return BottomSheetScrollView(
           child: Column(
@@ -54,44 +69,90 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
             children: [
               Text(
                 l10n.transferTitle,
-                style: AppTextStyle.text16w400(),
+                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
               AppSpaces.v16,
-              Text(l10n.from),
-              WalletField(
-                onChanged: (value) => _ctrl.from = value,
-                initValue: _ctrl.from,
-              ),
-              Text(l10n.to),
-              WalletField(
-                onChanged: (value) => _ctrl.to = value,
-                initValue: _ctrl.to,
-              ),
-              TextError(text: walletError),
-              AppSpaces.v16,
-              if (_ctrl.differentCurrencies)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: NumberField(
-                          controller: _ctrl.amount,
-                          labelText: _ctrl.from?.currency?.name,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.from,
+                      style: AppTextStyle.text12w400(
+                        color: AppColors.neutralSecondary(context),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    WalletField(
+                      onChanged: (value) => _ctrl.from = value,
+                      initValue: _ctrl.from,
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: IconButton(
+                          onPressed: _ctrl.swapWallets,
+                          icon: const Icon(Icons.swap_vert_rounded),
+                          visualDensity: VisualDensity.compact,
                         ),
                       ),
-                      AppSpaces.h16,
-                      _exchangeRate(context, l10n),
+                    ),
+                    Text(
+                      l10n.to,
+                      style: AppTextStyle.text12w400(
+                        color: AppColors.neutralSecondary(context),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    WalletField(
+                      onChanged: (value) => _ctrl.to = value,
+                      initValue: _ctrl.to,
+                    ),
+                    if (walletError != null) ...[
+                      const SizedBox(height: 6),
+                      TextError(text: walletError),
                     ],
-                  ),
+                    AppSpaces.v16,
+                    if (_ctrl.differentCurrencies) ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: NumberField(
+                              autofocus: true,
+                              controller: _ctrl.amount,
+                              labelText:
+                                  _ctrl.from?.currency?.code ??
+                                  l10n.transferAmount,
+                              suffixText: _ctrl.from?.currency?.symbol,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          AppSpaces.h12,
+                          _exchangeRate(context, l10n),
+                        ],
+                      ),
+                      AppSpaces.v16,
+                    ],
+                    NumberField(
+                      autofocus: !_ctrl.differentCurrencies,
+                      controller: _ctrl.total,
+                      labelText: _ctrl.differentCurrencies
+                          ? (_ctrl.to?.currency?.code ?? l10n.transferTotal)
+                          : l10n.transferAmount,
+                      suffixText: _ctrl.differentCurrencies
+                          ? _ctrl.to?.currency?.symbol
+                          : singleCurrencySymbol,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) {
+                        if (_ctrl.enableDone) _onDone(context, l10n);
+                      },
+                    ),
+                  ],
                 ),
-              AppSpaces.v16,
-              NumberField(
-                controller: _ctrl.total,
-                labelText: _ctrl.to?.currency?.name,
               ),
-              AppSpaces.v32,
+              AppSpaces.v24,
               BottomSheetActionRow(
                 action: ElevatedButton(
                   onPressed: _ctrl.enableDone
