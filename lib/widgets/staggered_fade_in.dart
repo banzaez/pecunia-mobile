@@ -28,21 +28,24 @@ class StaggeredFadeIn extends StatefulWidget {
 
 class _StaggeredFadeInState extends State<StaggeredFadeIn>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _opacityAnimation;
-  late final Animation<Offset> _slideAnimation;
+  AnimationController? _controller;
+  Animation<double>? _opacityAnimation;
+  Animation<Offset>? _slideAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    if (widget.index >= widget.maxAnimatedIndex) return;
+
+    final controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
+    _controller = controller;
 
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: controller,
         curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
       ),
     );
@@ -50,7 +53,7 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
     _slideAnimation =
         Tween<Offset>(begin: const Offset(0.0, 0.15), end: Offset.zero).animate(
           CurvedAnimation(
-            parent: _controller,
+            parent: controller,
             curve: const Interval(0.0, 1.0, curve: Curves.easeOutCubic),
           ),
         );
@@ -61,25 +64,25 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
       widget.maxDelay.inMilliseconds,
     );
     Future.delayed(Duration(milliseconds: clampedMs), () {
-      if (mounted) _controller.forward();
+      if (mounted) _controller?.forward();
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.index >= widget.maxAnimatedIndex) {
+    if (_controller == null) {
       return widget.child;
     }
 
     return FadeTransition(
-      opacity: _opacityAnimation,
-      child: SlideTransition(position: _slideAnimation, child: widget.child),
+      opacity: _opacityAnimation!,
+      child: SlideTransition(position: _slideAnimation!, child: widget.child),
     );
   }
 }

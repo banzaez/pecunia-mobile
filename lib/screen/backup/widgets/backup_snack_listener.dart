@@ -15,19 +15,19 @@ class BackupSnackListener extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
 
     ref.listen<BackupState>(backupNotifierProvider, (prev, next) {
-      final msg = next.snackMessage;
-      if (msg == null || msg == prev?.snackMessage) return;
+      final msg = next.snackType;
+      if (msg == null || msg == prev?.snackType) return;
 
       final text = switch (msg) {
-        '__saved__' => l10n.backupSavedSuccess,
-        '__restored__' => l10n.backupRestoredSuccess,
-        '__deleted__' => l10n.backupDeletedSuccess,
-        '__format_error__' => l10n.backupErrorMsg,
-        '__cancelled__' => l10n.backupCancelled,
-        _ => l10n.error,
+        BackupSnackType.saved => l10n.backupSavedSuccess,
+        BackupSnackType.restored => l10n.backupRestoredSuccess,
+        BackupSnackType.deleted => l10n.backupDeletedSuccess,
+        BackupSnackType.formatError => l10n.backupErrorMsg,
+        BackupSnackType.cancelled => l10n.backupCancelled,
+        BackupSnackType.error => l10n.error,
       };
 
-      if (msg == '__cancelled__') {
+      if (msg == BackupSnackType.cancelled) {
         ref.read(backupNotifierProvider.notifier).clearSnack();
         return;
       }
@@ -41,7 +41,7 @@ class BackupSnackListener extends ConsumerWidget {
 
       ref.read(backupNotifierProvider.notifier).clearSnack();
 
-      if (msg == '__restored__' && context.mounted) {
+      if (msg == BackupSnackType.restored && context.mounted) {
         context.go(AppRoute.home.path);
       }
     });

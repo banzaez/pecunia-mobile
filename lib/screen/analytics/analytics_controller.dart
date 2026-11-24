@@ -89,21 +89,12 @@ class AnalyticsNotifier extends Notifier<AnalyticsState> {
   @override
   AnalyticsState build() {
     ref.listen(
-      transactionNotifierProvider.select(
-        (s) => (
-          s.walletId,
-          s.analyticsTotal.total,
-          s.analyticsTotal.income,
-          s.analyticsTotal.expense,
-        ),
-      ),
+      transactionNotifierProvider.select((s) => (s.walletId, s.revision)),
       (prev, next) {
         if (next.$1 <= 0) return;
         if (prev == null) return;
-        if (prev.$1 != next.$1) {
+        if (prev.$1 != next.$1 || prev.$2 != next.$2) {
           _refreshAll();
-        } else if (prev.$2 != next.$2 || prev.$3 != next.$3 || prev.$4 != next.$4) {
-          _refreshAnalytics();
         }
       },
     );

@@ -39,6 +39,7 @@ class SQLProvider {
       version: SqlMigrations.currentVersion,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
+        await db.rawQuery('PRAGMA journal_mode = WAL');
       },
       onCreate: (db, _) => SqlMigrations.onCreate(db),
       onUpgrade: SqlMigrations.onUpgrade,
@@ -62,5 +63,27 @@ class SQLProvider {
     final escapedPath = backupPath.replaceAll("'", "''");
     await _database.execute("VACUUM INTO '$escapedPath'");
     return backupPath;
+  }
+
+  /// Проверяет целостность файла бэкапа и наличие обязательных таблиц.
+  static Future<bool> validateBackupDatabase(String path) async {
+    sql.Database? db;
+    try {
+      db = await sql.openReadOnlyDatabase(path);
+      final integrity = await db.rawQuery('PRAGMA integrity_check');
+      final integrityOk =
+          integrity.isNotEmpty && integrity.first.values.first == 'ok';
+      if (!integrityOk) return false;
+
+      final tables = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN (?, ?)",
+        [SQLTableWallets.tableName, SQLTableTransactions.tableName],
+      );
+      return tables.length == 2;
+    } catch (_) {
+      return false;
+    } finally {
+      await db?.close();
+    }
   }
 }

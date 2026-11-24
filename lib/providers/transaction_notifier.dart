@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:pecunia/models/analytics_total.dart';
 import 'package:pecunia/models/transaction.dart';
@@ -18,6 +20,7 @@ class TransactionState {
   final bool isLoading;
   final bool isLoadingMore;
   final bool hasMore;
+  final int revision;
   final String? error;
 
   const TransactionState({
@@ -27,6 +30,7 @@ class TransactionState {
     this.isLoading = false,
     this.isLoadingMore = false,
     this.hasMore = false,
+    this.revision = 0,
     this.error,
   }) : analyticsTotal = analyticsTotal ?? const AnalyticsTotal(0, 0, 0);
 
@@ -37,6 +41,7 @@ class TransactionState {
     bool? isLoading,
     bool? isLoadingMore,
     bool? hasMore,
+    int? revision,
     String? error,
     bool clearError = false,
   }) =>
@@ -47,6 +52,7 @@ class TransactionState {
         isLoading: isLoading ?? this.isLoading,
         isLoadingMore: isLoadingMore ?? this.isLoadingMore,
         hasMore: hasMore ?? this.hasMore,
+        revision: revision ?? this.revision,
         error: clearError ? null : (error ?? this.error),
       );
 }
@@ -66,18 +72,21 @@ class TransactionNotifier extends _$TransactionNotifier {
 
   Future<void> changeWallet(int walletId) async {
     state = state.copyWith(walletId: walletId);
-    await refreshAll();
+    await _syncCurrentWallet(showLoading: true, resetPagination: true);
   }
 
   // -----------SQL------------------------------------------------------------
 
   Future<void> refreshAll() async {
-    await _syncCurrentWallet(showLoading: true);
+    await _syncCurrentWallet(showLoading: true, resetPagination: true);
   }
 
-  /// Перезагружает первую страницу списка и итоги без полного сброса пагинации
+  /// Перезагружает загруженный диапазон списка и итоги без сброса пагинации
   /// при мутациях, затрагивающих текущий кошелёк.
-  Future<void> _syncCurrentWallet({bool showLoading = false}) async {
+  Future<void> _syncCurrentWallet({
+    bool showLoading = false,
+    bool resetPagination = false,
+  }) async {
     if (state.walletId <= 0) return;
 
     if (showLoading) {
@@ -89,28 +98,32 @@ class TransactionNotifier extends _$TransactionNotifier {
     try {
       final sql = ref.read(sqlProviderProvider).transactions;
       final walletId = state.walletId;
+      final targetLimit = resetPagination
+          ? TransactionState.pageSize
+          : math.max(TransactionState.pageSize, state.transactions.length);
 
       final results = await Future.wait<Object>([
         sql.selectByWalletId(
           walletId,
-          limit: TransactionState.pageSize,
+          limit: targetLimit + 1,
           offset: 0,
         ),
-        sql.countByWalletId(walletId),
         sql.selectTotalByWallet(walletId),
       ]);
 
-      final list = results[0] as List<Transaction>;
-      final total = results[1] as int;
-      final analyticsTotal = results[2] as AnalyticsTotal;
+      final fetched = results[0] as List<Transaction>;
+      final hasMore = fetched.length > targetLimit;
+      final list = hasMore ? fetched.sublist(0, targetLimit) : fetched;
+      final analyticsTotal = results[1] as AnalyticsTotal;
 
       if (state.walletId != walletId) return;
 
       state = state.copyWith(
         isLoading: false,
         transactions: list,
-        hasMore: list.length < total,
+        hasMore: hasMore,
         analyticsTotal: analyticsTotal,
+        revision: state.revision + 1,
       );
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -133,16 +146,20 @@ class TransactionNotifier extends _$TransactionNotifier {
     try {
       final sql = ref.read(sqlProviderProvider).transactions;
       final offset = state.transactions.length;
-      final list = await sql.selectByWalletId(
+      final fetched = await sql.selectByWalletId(
         walletId,
-        limit: TransactionState.pageSize,
+        limit: TransactionState.pageSize + 1,
         offset: offset,
       );
       if (state.walletId != walletId) return;
-      final merged = [...state.transactions, ...list];
+      final hasMore = fetched.length > TransactionState.pageSize;
+      final pageItems = hasMore
+          ? fetched.sublist(0, TransactionState.pageSize)
+          : fetched;
+      final merged = [...state.transactions, ...pageItems];
       state = state.copyWith(
         transactions: merged,
-        hasMore: list.length >= TransactionState.pageSize,
+        hasMore: hasMore,
         isLoadingMore: false,
       );
     } catch (e) {

@@ -2,11 +2,21 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/data/sql/sql_provider.dart';
 import 'package:pecunia/providers/sql_provider_ref.dart';
 import 'package:pecunia/providers/transaction_notifier.dart';
 import 'package:pecunia/providers/wallet_notifier.dart';
 import 'package:pecunia/util/ext_datetime.dart';
 import 'package:pecunia/util/sqlite_file.dart';
+
+enum BackupSnackType {
+  saved,
+  restored,
+  deleted,
+  formatError,
+  cancelled,
+  error,
+}
 
 // ---------------------------------------------------------------------------
 // State
@@ -16,14 +26,14 @@ class BackupState {
   final String filename;
   final int sizeKb;
   final bool isLoading;
-  final String? snackMessage;
+  final BackupSnackType? snackType;
   final bool isError;
 
   const BackupState({
     this.filename = '',
     this.sizeKb = 0,
     this.isLoading = false,
-    this.snackMessage,
+    this.snackType,
     this.isError = false,
   });
 
@@ -31,14 +41,14 @@ class BackupState {
     String? filename,
     int? sizeKb,
     bool? isLoading,
-    String? snackMessage,
+    BackupSnackType? snackType,
     bool? isError,
     bool clearSnack = false,
   }) => BackupState(
     filename: filename ?? this.filename,
     sizeKb: sizeKb ?? this.sizeKb,
     isLoading: isLoading ?? this.isLoading,
-    snackMessage: clearSnack ? null : (snackMessage ?? this.snackMessage),
+    snackType: clearSnack ? null : (snackType ?? this.snackType),
     isError: isError ?? this.isError,
   );
 }
@@ -92,7 +102,7 @@ class BackupNotifier extends Notifier<BackupState> {
       if (savedPath == null) {
         state = state.copyWith(
           isLoading: false,
-          snackMessage: '__cancelled__',
+          snackType: BackupSnackType.cancelled,
           isError: false,
         );
         return;
@@ -100,18 +110,27 @@ class BackupNotifier extends Notifier<BackupState> {
 
       state = state.copyWith(
         isLoading: false,
-        snackMessage: '__saved__',
+        snackType: BackupSnackType.saved,
         isError: false,
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        snackMessage: '__error__',
+        snackType: BackupSnackType.error,
         isError: true,
       );
     } finally {
       if (backupFile != null && await backupFile.parent.exists()) {
         await backupFile.parent.delete(recursive: true);
+      }
+    }
+  }
+
+  Future<void> _deleteWalSidecars(String dbPath) async {
+    for (final suffix in const ['-wal', '-shm']) {
+      final sidecar = File('$dbPath$suffix');
+      if (await sidecar.exists()) {
+        await sidecar.delete();
       }
     }
   }
@@ -122,13 +141,20 @@ class BackupNotifier extends Notifier<BackupState> {
 
     final path = result.single.path;
     if (path == null) {
-      state = state.copyWith(snackMessage: '__format_error__', isError: true);
+      state = state.copyWith(
+        snackType: BackupSnackType.formatError,
+        isError: true,
+      );
       return false;
     }
     final backupFile = File(path);
 
-    if (!await isSqliteFile(backupFile)) {
-      state = state.copyWith(snackMessage: '__format_error__', isError: true);
+    if (!await isSqliteFile(backupFile) ||
+        !await SQLProvider.validateBackupDatabase(path)) {
+      state = state.copyWith(
+        snackType: BackupSnackType.formatError,
+        isError: true,
+      );
       return false;
     }
 
@@ -136,13 +162,14 @@ class BackupNotifier extends Notifier<BackupState> {
     try {
       final sqlProvider = ref.read(sqlProviderProvider);
       await sqlProvider.close();
+      await _deleteWalSidecars(sqlProvider.databasePath);
       await backupFile.copy(sqlProvider.databasePath);
       await sqlProvider.init();
       await _refreshAll();
       await _refreshSize();
       state = state.copyWith(
         isLoading: false,
-        snackMessage: '__restored__',
+        snackType: BackupSnackType.restored,
         isError: false,
       );
       return true;
@@ -151,7 +178,7 @@ class BackupNotifier extends Notifier<BackupState> {
       await sqlProvider.init();
       state = state.copyWith(
         isLoading: false,
-        snackMessage: '__error__',
+        snackType: BackupSnackType.error,
         isError: true,
       );
       return false;
@@ -160,8 +187,8 @@ class BackupNotifier extends Notifier<BackupState> {
 
   void clearSnack() => state = state.copyWith(clearSnack: true);
 
-  void showMessage(String message, {bool isError = false}) {
-    state = state.copyWith(snackMessage: message, isError: isError);
+  void showMessage(BackupSnackType type, {bool isError = false}) {
+    state = state.copyWith(snackType: type, isError: isError);
   }
 }
 

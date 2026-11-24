@@ -46,6 +46,17 @@ class HomeTransactionList extends ConsumerStatefulWidget {
 
 class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
   final _scrollController = ScrollController();
+  List<Transaction>? _cachedTransactions;
+  List<HomeListItem> _cachedListItems = const [];
+
+  List<HomeListItem> _getListItems(List<Transaction> transactions) {
+    if (identical(_cachedTransactions, transactions)) {
+      return _cachedListItems;
+    }
+    _cachedTransactions = transactions;
+    _cachedListItems = _buildHomeList(transactions);
+    return _cachedListItems;
+  }
 
   @override
   void initState() {
@@ -242,7 +253,7 @@ class _HomeTransactionListState extends ConsumerState<HomeTransactionList> {
       return _emptyState(l10n);
     }
 
-    final listItems = _buildHomeList(transactions);
+    final listItems = _getListItems(transactions);
 
     return ListView.builder(
       controller: _scrollController,

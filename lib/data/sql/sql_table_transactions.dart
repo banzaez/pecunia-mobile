@@ -27,10 +27,13 @@ class SQLTableTransactions {
       );
 
   Future<void> addBatch({required List<Transaction> values}) async {
+    if (values.isEmpty) return;
     await _database.transaction((txn) async {
+      final batch = txn.batch();
       for (final value in values) {
-        await txn.insert(tableName, value.toJson()..remove("_id"));
+        batch.insert(tableName, value.toJson()..remove("_id"));
       }
+      await batch.commit(noResult: true);
     });
   }
 
@@ -104,22 +107,27 @@ class SQLTableTransactions {
   }
 
   Future<List<int>> availableMonths(int walletId, int year) async {
+    final start = fromDateTime(DateTime(year, 1, 1));
+    final end = fromDateTime(DateTime(year + 1, 1, 1));
     final result = await _database.rawQuery(
       "SELECT DISTINCT CAST(strftime('%m', $columnCreatedAt) AS INTEGER) AS m "
       "FROM $tableName WHERE $columnWalletId = ? "
-      "AND CAST(strftime('%Y', $columnCreatedAt) AS INTEGER) = ? ORDER BY m",
-      [walletId, year],
+      "AND $columnCreatedAt >= ? AND $columnCreatedAt < ? ORDER BY m",
+      [walletId, start, end],
     );
     return result.map((r) => r['m'] as int).toList();
   }
 
   Future<List<int>> availableDays(int walletId, int year, int month) async {
-    final paddedMonth = month.toString().padLeft(2, '0');
+    final start = fromDateTime(DateTime(year, month, 1));
+    final end = fromDateTime(
+      month == 12 ? DateTime(year + 1, 1, 1) : DateTime(year, month + 1, 1),
+    );
     final result = await _database.rawQuery(
       "SELECT DISTINCT CAST(strftime('%d', $columnCreatedAt) AS INTEGER) AS d "
       "FROM $tableName WHERE $columnWalletId = ? "
-      "AND strftime('%Y-%m', $columnCreatedAt) = ? ORDER BY d",
-      [walletId, '$year-$paddedMonth'],
+      "AND $columnCreatedAt >= ? AND $columnCreatedAt < ? ORDER BY d",
+      [walletId, start, end],
     );
     return result.map((r) => r['d'] as int).toList();
   }

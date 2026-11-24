@@ -44,7 +44,7 @@ class _TransferSheetState extends ConsumerState<TransferSheet> {
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (_, _) {
-        final walletError = _ctrl.errorWallet != null
+        final walletError = _ctrl.hasWalletError
             ? l10n.transferErrorWallet
             : null;
 

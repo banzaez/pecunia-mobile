@@ -102,5 +102,48 @@ void main() {
     final bytes = await file.openRead(0, 16).first;
     final header = String.fromCharCodes(bytes);
     expect(header.startsWith('SQLite format 3'), isTrue);
+    expect(await SQLProvider.validateBackupDatabase(backupPath), isTrue);
+  });
+
+  test('validateBackupDatabase rejects sqlite db without pecunia tables', () async {
+    final foreignPath = '${tempDir.path}/foreign.db';
+    final db = await databaseFactory.openDatabase(foreignPath);
+    await db.execute('CREATE TABLE other (id INTEGER PRIMARY KEY)');
+    await db.close();
+
+    expect(await SQLProvider.validateBackupDatabase(foreignPath), isFalse);
+  });
+
+  test('availableMonths and availableDays return sorted distinct dates', () async {
+    final walletId = (await sqlProvider.wallets.selectAll()).first.id;
+    await sqlProvider.transactions.addBatch(
+      values: [
+        Transaction(
+          walletId: walletId,
+          amount: -10,
+          category: FinanceCategories.foodAndDrinks,
+          createdAt: DateTime(2025, 3, 15, 10, 0),
+          description: 'a',
+        ),
+        Transaction(
+          walletId: walletId,
+          amount: -20,
+          category: FinanceCategories.foodAndDrinks,
+          createdAt: DateTime(2025, 3, 5, 12, 0),
+          description: 'b',
+        ),
+        Transaction(
+          walletId: walletId,
+          amount: -30,
+          category: FinanceCategories.foodAndDrinks,
+          createdAt: DateTime(2025, 11, 1, 9, 0),
+          description: 'c',
+        ),
+      ],
+    );
+
+    expect(await sqlProvider.transactions.availableYears(walletId), [2025]);
+    expect(await sqlProvider.transactions.availableMonths(walletId, 2025), [3, 11]);
+    expect(await sqlProvider.transactions.availableDays(walletId, 2025, 3), [5, 15]);
   });
 }

@@ -1,8 +1,7 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_localizations/flutter_localizations.dart'
-    hide GlobalCupertinoLocalizations, GlobalMaterialLocalizations;
+import 'package:flutter_localizations/flutter_localizations.dart' as fl;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/l10n/app_localizations.dart';
 import 'package:pecunia/data/sql/sql_provider.dart';
@@ -75,9 +74,11 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsNotifierProvider);
-    final resolvedLocale =
-        settings.locale ?? PlatformDispatcher.instance.locale;
+    final locale = ref.watch(settingsNotifierProvider.select((s) => s.locale));
+    final themeMode = ref.watch(
+      settingsNotifierProvider.select((s) => s.themeMode),
+    );
+    final resolvedLocale = locale ?? PlatformDispatcher.instance.locale;
     Intl.defaultLocale = resolvedLocale.toString();
 
     return MaterialApp.router(
@@ -85,15 +86,20 @@ class MyApp extends ConsumerWidget {
       routerConfig: appRouter,
       theme: AppThemes.theme,
       darkTheme: AppThemes.darkTheme,
-      themeMode: settings.themeMode,
+      themeMode: themeMode,
       builder: AppSystemUi.wrap,
-      locale: settings.locale,
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+        // Нужны для сторонних пакетов на package:flutter/material.dart (например, currency_picker).
+        // ignore: deprecated_member_use
+        fl.GlobalMaterialLocalizations.delegate,
+        // ignore: deprecated_member_use
+        fl.GlobalCupertinoLocalizations.delegate,
+        fl.GlobalWidgetsLocalizations.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         final settingsLocale = ref.read(settingsNotifierProvider).locale;

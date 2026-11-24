@@ -116,6 +116,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<int>(
+      transactionNotifierProvider.select((s) => s.revision),
+      (prev, next) {
+        if (prev != null && prev != next && mounted) {
+          _loadTransactions();
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context);
     final isRoundUp = ref.watch(
       settingsNotifierProvider.select((s) => s.isRoundUp),

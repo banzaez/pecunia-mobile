@@ -5,7 +5,7 @@ import 'package:pecunia/data/sql/sql_table_wallets.dart';
 
 /// Текущая версия схемы БД. При изменении схемы увеличить и добавить шаг в [_migrateTo].
 abstract final class SqlMigrations {
-  static const int currentVersion = 1;
+  static const int currentVersion = 2;
 
   static Future<void> onCreate(sql.Database db) async {
     await db.execute(
@@ -32,8 +32,9 @@ abstract final class SqlMigrations {
     );
 
     await db.execute(
-      "CREATE INDEX idx_transactions_wallet_id "
-      "ON ${SQLTableTransactions.tableName} (${SQLTableTransactions.columnWalletId})",
+      "CREATE INDEX idx_transactions_wallet_created "
+      "ON ${SQLTableTransactions.tableName} "
+      "(${SQLTableTransactions.columnWalletId}, ${SQLTableTransactions.columnCreatedAt} DESC)",
     );
 
     await db.execute(
@@ -60,8 +61,13 @@ abstract final class SqlMigrations {
     switch (version) {
       case 1:
         break;
-      // case 2:
-      //   await db.execute('ALTER TABLE ...');
+      case 2:
+        await db.execute(
+          "CREATE INDEX IF NOT EXISTS idx_transactions_wallet_created "
+          "ON ${SQLTableTransactions.tableName} "
+          "(${SQLTableTransactions.columnWalletId}, ${SQLTableTransactions.columnCreatedAt} DESC)",
+        );
+        await db.execute("DROP INDEX IF EXISTS idx_transactions_wallet_id");
     }
   }
 }

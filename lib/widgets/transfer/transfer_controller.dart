@@ -12,7 +12,7 @@ class TransferController extends ChangeNotifier {
   bool enableDone = false;
   bool divisionSign = false;
 
-  String? errorWallet;
+  bool hasWalletError = false;
 
   Wallet? _from;
   Wallet? get from => _from;
@@ -56,9 +56,8 @@ class TransferController extends ChangeNotifier {
     exchangeRate.number = 1;
     differentCurrencies =
         (_from != null && _to != null && _from?.currency?.code != _to?.currency?.code);
-    errorWallet = (_from != null && _to != null && _from?.id == _to?.id)
-        ? '__wallet_error__'
-        : null;
+    hasWalletError =
+        _from != null && _to != null && _from?.id == _to?.id;
 
     if (differentCurrencies) {
       amount.clear();
@@ -102,7 +101,7 @@ class TransferController extends ChangeNotifier {
   // ----------IS OK-----------------------------------------------------------------------------
 
   bool isOk() {
-    if (errorWallet != null) return false;
+    if (hasWalletError) return false;
     if (amount.number == 0) return false;
     if (differentCurrencies && exchangeRate.number == 0) return false;
     if (total.number == 0) return false;
